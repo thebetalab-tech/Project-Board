@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo-text {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* Nav Bar */
+        .navbar {
+            background-color: var(--teal);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .faculty-label {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .navbar-middle {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            color: var(--orange);
+            border-bottom: 2px solid var(--orange);
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .bell-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: var(--orange);
+            color: var(--ink);
+            font-size: 0.65rem;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background-color: var(--cyan);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Page Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--ink);
+            margin-bottom: 0.5rem;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: var(--teal);
+            font-weight: 500;
+        }
+
+        /* Stats Grid */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .stat-card {
+            background-color: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            border-top-width: 4px;
+        }
+
+        .stat-card-orange { border-top-color: var(--orange); }
+        .stat-card-sienna { border-top-color: var(--sienna); }
+        .stat-card-cyan { border-top-color: var(--cyan); }
+        .stat-card-aqua { border-top-color: var(--aqua); }
+
+        .stat-header {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--ink);
+            font-family: 'DM Serif Display', serif;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--ink);
+        }
+
+        .stat-sub {
+            font-size: 0.85rem;
+            color: var(--teal);
+            font-weight: 500;
+        }
+
+        /* Main Area */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: var(--teal);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'DM Serif Display', serif;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        th {
+            font-weight: 700;
+            color: var(--ink);
+            background-color: rgba(233, 216, 166, 0.3); /* light custard */
+        }
+
+        tr:nth-child(even) {
+            background-color: rgba(233, 216, 166, 0.1);
+        }
+
+        tr:hover {
+            border-left: 3px solid var(--orange);
+            background-color: rgba(233, 216, 166, 0.2);
+        }
+
+        /* Buttons & Badges */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-cyan {
+            background-color: var(--cyan);
+            color: white;
+        }
+
+        .btn-cyan:hover {
+            background-color: var(--teal);
+        }
+
+        .btn-outline-cyan {
+            background-color: transparent;
+            color: var(--cyan);
+            border: 2px solid var(--cyan);
+        }
+
+        .btn-outline-cyan:hover {
+            background-color: var(--cyan);
+            color: white;
+        }
+
+        .btn-orange {
+            background-color: var(--orange);
+            color: var(--ink);
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-orange:hover {
+            background-color: var(--rust);
+            color: white;
+        }
+
+        .badge {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-pending { background-color: var(--orange); color: var(--ink); }
+        .badge-active { background-color: var(--cyan); color: white; }
+        .badge-approved { background-color: var(--aqua); color: var(--ink); }
+
+        .view-all-link {
+            display: block;
+            text-align: right;
+            margin-top: 1rem;
+            color: var(--cyan);
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            margin-top: 1rem;
+        }
+
+        .bar-row {
+            margin-bottom: 1rem;
+        }
+
+        .bar-label-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .bar-bg {
+            height: 12px;
+            background-color: rgba(0,0,0,0.05);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+        }
+
+        /* Timeline */
+        .timeline {
+            border-left: 2px solid var(--rust);
+            padding-left: 1.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.9rem;
+            top: 0.2rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--orange);
+            border: 2px solid white;
+        }
+
+        .timeline-time {
+            font-size: 0.8rem;
+            color: var(--teal);
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-content {
+            font-size: 0.9rem;
+        }
+
+        .timeline-item:nth-child(2)::before { background-color: var(--aqua); }
+        .timeline-item:nth-child(3)::before { background-color: var(--clay); }
+
+        /* Footer */
+        footer {
+            background-color: var(--ink);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .navbar-middle {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .stats-row {
+                grid-template-columns: 1fr 1fr;
+            }
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="logo-text">Project Board</a>
+            <span class="faculty-label">Faculty Portal</span>
+        </div>
+        <div class="navbar-middle">
+            <a href="faculty-dashboard.html" class="nav-link active">Dashboard</a>
+            <a href="group-requests.html" class="nav-link">Group Requests</a>
+            <a href="project-requests.html" class="nav-link">Project Reviews</a>
+            <a href="approved-projects.html" class="nav-link">Approved Projects</a>
+            <a href="generate-report.html" class="nav-link">Generate Report</a>
+        </div>
+        <div class="navbar-right">
+            <div class="bell-icon">
+                🔔
+                <span class="badge-count">5</span>
+            </div>
+            <div class="user-profile">
+                <div class="avatar">AS</div>
+                <span style="font-weight: 500;">Prof. Akash Siddhpura</span>
+                <span>▾</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb">Welcome, Prof. Akash · Technology: PHP</div>
+            <h1 class="page-title">Faculty Dashboard</h1>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card stat-card-orange">
+                <div class="stat-header">
+                    <span class="stat-icon">👥</span>
+                    <span class="stat-number">2</span>
+                </div>
+                <div class="stat-label">Pending Group Requests</div>
+                <div class="stat-sub">Needs attention</div>
+            </div>
+            
+            <div class="stat-card stat-card-sienna">
+                <div class="stat-header">
+                    <span class="stat-icon">📄</span>
+                    <span class="stat-number">3</span>
+                </div>
+                <div class="stat-label">Pending Project Reviews</div>
+                <div class="stat-sub">Needs attention</div>
+            </div>
+
+            <div class="stat-card stat-card-cyan">
+                <div class="stat-header">
+                    <span class="stat-icon">🚀</span>
+                    <span class="stat-number">8</span>
+                </div>
+                <div class="stat-label">Active Groups</div>
+                <div class="stat-sub">Mentoring currently</div>
+            </div>
+
+            <div class="stat-card stat-card-aqua">
+                <div class="stat-header">
+                    <span class="stat-icon">🏆</span>
+                    <span class="stat-number">12</span>
+                </div>
+                <div class="stat-label">Approved Projects</div>
+                <div class="stat-sub">Successfully registered</div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="left-col">
+                <div class="card">
+                    <div class="card-header">Pending Group Requests</div>
+                    <div class="card-body" style="padding: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Leader</th>
+                                    <th>Members</th>
+                                    <th>Tech</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Team Syntax Error</strong></td>
+                                    <td>Tirth Joshi</td>
+                                    <td>3</td>
+                                    <td><span class="badge badge-active">PHP</span></td>
+                                    <td><a href="group-requests.html" class="btn btn-cyan">Review</a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Team ByteForce</strong></td>
+                                    <td>Ankit Shah</td>
+                                    <td>4</td>
+                                    <td><span class="badge badge-active">PHP</span></td>
+                                    <td><a href="group-requests.html" class="btn btn-outline-cyan">Review</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="padding: 1rem 1.5rem;">
+                            <a href="group-requests.html" class="view-all-link">View all 2 requests →</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Pending Project Reviews</div>
+                    <div class="card-body" style="padding: 0;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Group</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Team Code Kings</strong></td>
+                                    <td>Hospital Management System</td>
+                                    <td>UDP</td>
+                                    <td>17 Jun</td>
+                                    <td><a href="project-requests.html" class="btn btn-cyan">Review</a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Team Debuggers</strong></td>
+                                    <td>Library Management System</td>
+                                    <td>IDP</td>
+                                    <td>16 Jun</td>
+                                    <td><a href="project-requests.html" class="btn btn-outline-cyan">Review</a></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Team Alpha</strong></td>
+                                    <td>Smart Attendance System</td>
+                                    <td>UDP</td>
+                                    <td>15 Jun</td>
+                                    <td><a href="project-requests.html" class="btn btn-outline-cyan">Review</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="padding: 1rem 1.5rem;">
+                            <a href="project-requests.html" class="view-all-link">View all 3 reviews →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-col">
+                <div class="card">
+                    <div class="card-header">My Technology</div>
+                    <div class="card-body">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                            <h3 style="font-family: 'DM Sans', sans-serif; color: var(--teal);">PHP Specialization</h3>
+                            <span class="badge badge-active" style="font-size: 1rem;">20 Total Groups</span>
+                        </div>
+                        
+                        <div class="bar-chart">
+                            <div class="bar-row">
+                                <div class="bar-label-group">
+                                    <span>Approved Projects</span>
+                                    <span>12</span>
+                                </div>
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: 60%; background-color: var(--aqua);"></div>
+                                </div>
+                            </div>
+                            <div class="bar-row">
+                                <div class="bar-label-group">
+                                    <span>Active Groups (Pending Project)</span>
+                                    <span>8</span>
+                                </div>
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: 40%; background-color: var(--cyan);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Quick Actions</div>
+                    <div class="card-body" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a href="generate-report.html" class="btn btn-orange">📄 Generate PDF Report</a>
+                        <button class="btn btn-outline-cyan" style="width: 100%; text-align: left; padding: 12px 16px; margin-bottom: 0.5rem;">👥 Browse All Groups</button>
+                        <button class="btn btn-outline-cyan" style="width: 100%; text-align: left; padding: 12px 16px;">🎓 Browse Students</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Recent Activity</div>
+                    <div class="card-body">
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-time">Today, 10:30 AM</div>
+                                <div class="timeline-content">Received new proposal from <strong>Team Code Kings</strong>.</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">Yesterday, 4:15 PM</div>
+                                <div class="timeline-content">Approved project "Payroll System" for <strong>Team Beta</strong>.</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-time">16 Jun, 2:00 PM</div>
+                                <div class="timeline-content">Rejected group request from <strong>Team Xtreme</strong> (Reason: Incomplete members).</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <script>
+        // Interactive bells & dropdowns
+        document.querySelector('.bell-icon').addEventListener('click', function() {
+            alert('Opening notifications panel (Demo)');
+        });
+        document.querySelector('.user-profile').addEventListener('click', function() {
+            alert('Opening user profile dropdown (Demo)');
+        });
+    </script>
+</body>
+</html>

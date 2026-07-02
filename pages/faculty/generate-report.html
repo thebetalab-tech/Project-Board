@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Report - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo-text {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* Nav Bar */
+        .navbar {
+            background-color: var(--teal);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 1rem; }
+        .logo-text { font-size: 1.5rem; text-decoration: none; color: white; }
+        .faculty-label { background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .navbar-middle { display: flex; gap: 1.5rem; }
+        .nav-link { color: white; text-decoration: none; font-weight: 500; padding-bottom: 0.25rem; transition: all 0.2s; }
+        .nav-link.active, .nav-link:hover { color: var(--orange); border-bottom: 2px solid var(--orange); }
+        .navbar-right { display: flex; align-items: center; gap: 1.5rem; }
+        .bell-icon { position: relative; cursor: pointer; font-size: 1.25rem; }
+        .badge-count { position: absolute; top: -5px; right: -8px; background-color: var(--orange); color: var(--ink); font-size: 0.65rem; font-weight: bold; padding: 2px 5px; border-radius: 10px; }
+        .user-profile { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .avatar { width: 32px; height: 32px; background-color: var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+
+        /* Page Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .page-header { margin-bottom: 2rem; }
+        .page-title { font-size: 2.5rem; color: var(--ink); margin-bottom: 0.5rem; }
+        .breadcrumb { font-size: 0.9rem; color: var(--teal); font-weight: 500; }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 45% 55%;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        /* Config Card */
+        .config-card {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+        }
+
+        .config-meta {
+            background: rgba(233, 216, 166, 0.2);
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid var(--teal);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+        .config-meta strong { color: var(--teal); }
+
+        .form-section-title {
+            font-family: 'DM Serif Display', serif;
+            color: var(--ink);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .custom-checkbox input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--teal);
+            cursor: pointer;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .custom-radio {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .custom-radio input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--teal);
+        }
+
+        .disabled-text {
+            color: #888;
+        }
+
+        .btn-generate {
+            background: var(--orange);
+            color: var(--ink);
+            width: 100%;
+            padding: 16px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-generate:hover {
+            background: var(--rust);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(202, 103, 2, 0.3);
+        }
+
+        .power-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Loading Bar */
+        .progress-container {
+            display: none;
+            margin-bottom: 1rem;
+        }
+        .progress-text {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--teal);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        .progress-bar-bg {
+            height: 8px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--cyan);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 2s linear;
+        }
+
+        /* Report Preview - PDF Look */
+        .preview-container {
+            position: relative;
+        }
+
+        .preview-paper {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.05);
+            min-height: 600px;
+            aspect-ratio: 1 / 1.414; /* A4 ratio */
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Paper fold effect */
+        .preview-paper::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            border-width: 0 30px 30px 0;
+            border-style: solid;
+            border-color: #f4f4f4 white;
+            box-shadow: -2px 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .pdf-header {
+            border-bottom: 2px solid var(--ink);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .pdf-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: var(--ink);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .pdf-subtitle {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .pdf-section {
+            margin-bottom: 2rem;
+        }
+
+        .pdf-h3 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--teal);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.25rem;
+        }
+
+        .pdf-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pdf-summary-box {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .pdf-summary-num {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--ink);
+        }
+
+        .pdf-summary-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .pdf-table th {
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+            color: var(--ink);
+        }
+
+        .pdf-table td {
+            border: 1px solid #ddd;
+            padding: 6px;
+        }
+
+        .disclaimer-overlay {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--ink);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* Footer */
+        footer { background-color: var(--ink); color: white; text-align: center; padding: 1.5rem; font-size: 0.9rem; margin-top: auto; }
+
+        @media (max-width: 992px) {
+            .layout-grid { grid-template-columns: 1fr; }
+            .preview-paper { max-width: 600px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="logo-text">Project Board</a>
+            <span class="faculty-label">Faculty Portal</span>
+        </div>
+        <div class="navbar-middle">
+            <a href="faculty-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="group-requests.html" class="nav-link">Group Requests</a>
+            <a href="project-requests.html" class="nav-link">Project Reviews</a>
+            <a href="approved-projects.html" class="nav-link">Approved Projects</a>
+            <a href="generate-report.html" class="nav-link active">Generate Report</a>
+        </div>
+        <div class="navbar-right">
+            <div class="bell-icon">🔔<span class="badge-count">3</span></div>
+            <div class="user-profile">
+                <div class="avatar">AS</div>
+                <span style="font-weight: 500;">Prof. Akash</span>
+                <span>▾</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb">Download a PDF summary of your technology's groups and projects</div>
+            <h1 class="page-title">Generate Report</h1>
+        </div>
+
+        <div class="layout-grid">
+            <!-- Left: Configuration -->
+            <div class="config-card">
+                <div class="config-meta">
+                    <div><strong>Report for:</strong> PHP Technology</div>
+                    <div><strong>Generated by:</strong> Prof. Akash Siddhpura</div>
+                    <div><strong>Date:</strong> <span id="currentDate">19 Jun 2026</span></div>
+                </div>
+
+                <div class="form-section-title">Include in Report</div>
+                <div class="checkbox-group">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" checked> Active Groups with member list
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" checked> Approved Projects with keyword tags
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" checked> Pending Project Proposals
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" checked> Rejected Proposals (with reasons)
+                    </label>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" checked> Group request history
+                    </label>
+                </div>
+
+                <div class="form-section-title">Format Options</div>
+                <div class="radio-group">
+                    <label class="custom-radio">
+                        <input type="radio" name="format" value="pdf" checked> PDF (recommended)
+                    </label>
+                    <label class="custom-radio disabled-text">
+                        <input type="radio" name="format" value="csv" disabled> CSV data export (future update)
+                    </label>
+                </div>
+
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-text">Generating PDF document...</div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBar"></div>
+                    </div>
+                </div>
+
+                <button class="btn-generate" onclick="generateReport()" id="genBtn">🖨 Generate & Download PDF</button>
+                <div class="power-note">Powered by iTextSharp · report generated server-side</div>
+            </div>
+
+            <!-- Right: Preview -->
+            <div class="preview-container">
+                <div class="preview-paper">
+                    <div class="pdf-header">
+                        <div class="pdf-title">PROJECT BOARD</div>
+                        <div class="pdf-subtitle">PHP TECHNOLOGY SUMMARY REPORT</div>
+                        <div class="pdf-subtitle" style="margin-top: 5px;" id="previewDate">Prof. Akash Siddhpura · Generated: 19 Jun 2026</div>
+                    </div>
+
+                    <div class="pdf-summary-grid">
+                        <div class="pdf-summary-box">
+                            <div class="pdf-summary-num">8</div>
+                            <div class="pdf-summary-label">Active Groups</div>
+                        </div>
+                        <div class="pdf-summary-box">
+                            <div class="pdf-summary-num">12</div>
+                            <div class="pdf-summary-label">Approved Projects</div>
+                        </div>
+                        <div class="pdf-summary-box">
+                            <div class="pdf-summary-num">3</div>
+                            <div class="pdf-summary-label">Pending Reviews</div>
+                        </div>
+                    </div>
+
+                    <div class="pdf-section">
+                        <h3 class="pdf-h3">1. Active Groups Overview</h3>
+                        <table class="pdf-table">
+                            <thead>
+                                <tr>
+                                    <th>Group Name</th>
+                                    <th>Leader</th>
+                                    <th>Members</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Team Alpha</td>
+                                    <td>Raj Mehta</td>
+                                    <td>4</td>
+                                    <td>Project Approved</td>
+                                </tr>
+                                <tr>
+                                    <td>Team Beta</td>
+                                    <td>Sara Patel</td>
+                                    <td>3</td>
+                                    <td>Project Approved</td>
+                                </tr>
+                                <tr>
+                                    <td>Team Code Kings</td>
+                                    <td>Tirth Joshi</td>
+                                    <td>4</td>
+                                    <td>Pending Review</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="font-size: 0.75rem; color: #888; text-align: center; margin-top: 8px; font-style: italic;">
+                            + 5 more rows in full report...
+                        </div>
+                    </div>
+                    
+                    <div class="pdf-section">
+                        <h3 class="pdf-h3">2. Approved Projects Library</h3>
+                        <div style="width: 100%; height: 60px; background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #f9f9f9 10px, #f9f9f9 20px); border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.85rem;">
+                            Content blurred in preview
+                        </div>
+                    </div>
+
+                </div>
+                <div class="disclaimer-overlay">Preview Only — actual download has full data</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <script>
+        // Set dynamic dates for realistic feel
+        const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        document.getElementById('currentDate').innerText = today;
+        document.getElementById('previewDate').innerText = `Prof. Akash Siddhpura · Generated: ${today}`;
+
+        function generateReport() {
+            const btn = document.getElementById('genBtn');
+            const progress = document.getElementById('progressContainer');
+            const bar = document.getElementById('progressBar');
+            
+            // UI state changes
+            btn.style.display = 'none';
+            progress.style.display = 'block';
+            
+            // Trigger animation
+            setTimeout(() => {
+                bar.style.width = '100%';
+            }, 50);
+
+            // After animation completes
+            setTimeout(() => {
+                alert('✅ Report ready! Download starting...');
+                
+                // Reset UI
+                bar.style.width = '0%';
+                progress.style.display = 'none';
+                btn.style.display = 'block';
+            }, 2100);
+        }
+    </script>
+</body>
+</html>

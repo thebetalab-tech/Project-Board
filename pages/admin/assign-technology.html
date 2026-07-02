@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Technologies - Project Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219; --teal: #005f73; --cyan: #0a9396; --aqua: #94d2bd;
+            --custard: #e9d8a6; --orange: #ee9b00; --rust: #ca6702;
+            --sienna: #bb3e03; --clay: #ae2012; --brick: #9b2226;
+            --font-head: 'DM Serif Display', serif; --font-body: 'DM Sans', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background-color: var(--custard); color: var(--ink); display: flex; flex-direction: column; min-height: 100vh; }
+        
+        .navbar { background-color: var(--brick); color: white; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .navbar .logo { font-family: var(--font-head); font-size: 1.5rem; text-decoration: none; color: white; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; }
+        .nav-links a.active, .nav-links a:hover { color: var(--orange); text-decoration: underline; }
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        .admin-badge { background-color: var(--orange); color: var(--ink); padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }
+        
+        .page-header { padding: 2rem 2rem 1rem; }
+        .breadcrumb { font-size: 0.9rem; color: var(--ink); opacity: 0.8; margin-bottom: 0.5rem; }
+        .page-title { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--ink); font-size: 1.1rem; opacity: 0.9; }
+        
+        .main-content { flex: 1; padding: 1rem 2rem 2rem; display: flex; flex-direction: column; gap: 2rem; }
+        
+        .matrix-card { background: white; border: 1px solid var(--rust); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,18,25,0.08); overflow-x: auto; }
+        
+        .matrix-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .matrix-table th, .matrix-table td { text-align: center; padding: 16px; border: 1px solid #ddd; position: relative; }
+        .matrix-table th { background-color: var(--brick); color: white; font-weight: 700; font-family: var(--font-head); font-size: 1.2rem; }
+        .matrix-table th:first-child { background-color: white; border: none; }
+        .matrix-table td:first-child { text-align: left; font-weight: bold; background: var(--custard); font-family: var(--font-head); font-size: 1.2rem; color: var(--teal); border: 1px solid white; border-bottom: 1px solid #ddd;}
+        
+        .matrix-table td.cell-check { cursor: pointer; transition: background 0.2s, color 0.2s; font-size: 1.5rem; color: #ccc; user-select: none; }
+        .matrix-table td.cell-check:hover { background-color: #f0f0f0; }
+        .matrix-table td.cell-check.checked { background-color: var(--cyan); color: white; }
+        
+        .btn-primary { background-color: var(--orange); color: var(--ink); font-weight: 700; border-radius: 6px; padding: 16px 24px; border: none; cursor: pointer; transition: background 0.2s; font-size: 1.2rem; width: 100%; display: block; margin-top: 1rem; }
+        .btn-primary:hover { background-color: var(--rust); color: white; }
+        
+        .summary-card { background: white; border: 1px solid var(--rust); border-radius: 8px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,18,25,0.08); }
+        .summary-card h2 { font-family: var(--font-head); color: var(--teal); margin-bottom: 1.5rem; font-size: 1.8rem; border-bottom: 2px solid var(--custard); padding-bottom: 0.5rem;}
+        
+        .summary-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+        .summary-item { margin-bottom: 0.8rem; padding: 1rem; border: 1px solid #eee; border-radius: 8px; background: #fafafa; }
+        .summary-item strong { display: block; margin-bottom: 0.8rem; font-size: 1.1rem; color: var(--ink); }
+        
+        .pill { background: var(--teal); color: white; border-radius: 12px; padding: 4px 10px; font-size: 0.85rem; display: inline-block; margin: 2px 4px 2px 0; }
+        
+        .info-box { background: var(--custard); padding: 1.5rem; border-left: 6px solid var(--orange); border-radius: 4px; display: flex; gap: 1rem; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .info-box i { font-size: 2rem; }
+        .info-box p { font-size: 1.1rem; line-height: 1.4; color: var(--ink); font-weight: 500;}
+
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--aqua); color: var(--ink); text-align: center; border-radius: 6px; padding: 16px; position: fixed; z-index: 100; left: 50%; transform: translateX(-50%); bottom: 30px; font-weight: bold; box-shadow: 0 4px 12px rgba(0,0,0,0.15); opacity: 0; transition: opacity 0.5s, bottom 0.5s; }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        footer { background-color: var(--ink); color: white; text-align: center; padding: 1rem; font-size: 0.9rem; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="admin-dashboard.html" class="logo">Project Board</a>
+        <div class="nav-links">
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="manage-users.html">Users</a>
+            <a href="manage-faculty.html">Faculty</a>
+            <a href="manage-technology.html">Technologies</a>
+            <a href="#">All Groups</a>
+            <a href="#">All Projects</a>
+        </div>
+        <div class="nav-right">
+            <span class="admin-badge">Admin</span>
+            <span>System Admin</span>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="breadcrumb">Dashboard &gt; Assign Technologies</div>
+        <h1 class="page-title">Assign Technologies to Faculty</h1>
+        <p class="subtitle">Control who mentors which stack</p>
+    </div>
+
+    <div class="main-content">
+        <div class="matrix-card">
+            <table class="matrix-table" id="matrixTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>PHP</th>
+                        <th>.NET</th>
+                        <th>Python</th>
+                        <th>Java</th>
+                        <th>React</th>
+                        <th>Android</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-faculty="Prof. Akash Siddhpura">
+                        <td>Prof. Akash Siddhpura</td>
+                        <td class="cell-check checked" data-tech="PHP">✓</td>
+                        <td class="cell-check" data-tech=".NET">✗</td>
+                        <td class="cell-check" data-tech="Python">✗</td>
+                        <td class="cell-check" data-tech="Java">✗</td>
+                        <td class="cell-check" data-tech="React">✗</td>
+                        <td class="cell-check" data-tech="Android">✗</td>
+                    </tr>
+                    <tr data-faculty="Prof. Mansi Shingala">
+                        <td>Prof. Mansi Shingala</td>
+                        <td class="cell-check checked" data-tech="PHP">✓</td>
+                        <td class="cell-check" data-tech=".NET">✗</td>
+                        <td class="cell-check checked" data-tech="Python">✓</td>
+                        <td class="cell-check" data-tech="Java">✗</td>
+                        <td class="cell-check" data-tech="React">✗</td>
+                        <td class="cell-check" data-tech="Android">✗</td>
+                    </tr>
+                    <tr data-faculty="Prof. Ghada Afsana">
+                        <td>Prof. Ghada Afsana</td>
+                        <td class="cell-check checked" data-tech="PHP">✓</td>
+                        <td class="cell-check" data-tech=".NET">✗</td>
+                        <td class="cell-check" data-tech="Python">✗</td>
+                        <td class="cell-check" data-tech="Java">✗</td>
+                        <td class="cell-check" data-tech="React">✗</td>
+                        <td class="cell-check" data-tech="Android">✗</td>
+                    </tr>
+                    <tr data-faculty="Prof. Rohan Desai">
+                        <td>Prof. Rohan Desai</td>
+                        <td class="cell-check" data-tech="PHP">✗</td>
+                        <td class="cell-check checked" data-tech=".NET">✓</td>
+                        <td class="cell-check" data-tech="Python">✗</td>
+                        <td class="cell-check checked" data-tech="Java">✓</td>
+                        <td class="cell-check" data-tech="React">✗</td>
+                        <td class="cell-check" data-tech="Android">✗</td>
+                    </tr>
+                    <tr data-faculty="Prof. Neha Patel">
+                        <td>Prof. Neha Patel</td>
+                        <td class="cell-check" data-tech="PHP">✗</td>
+                        <td class="cell-check" data-tech=".NET">✗</td>
+                        <td class="cell-check checked" data-tech="Python">✓</td>
+                        <td class="cell-check" data-tech="Java">✗</td>
+                        <td class="cell-check" data-tech="React">✗</td>
+                        <td class="cell-check" data-tech="Android">✗</td>
+                    </tr>
+                    <tr data-faculty="Prof. Vivek Shah">
+                        <td>Prof. Vivek Shah</td>
+                        <td class="cell-check" data-tech="PHP">✗</td>
+                        <td class="cell-check" data-tech=".NET">✗</td>
+                        <td class="cell-check" data-tech="Python">✗</td>
+                        <td class="cell-check" data-tech="Java">✗</td>
+                        <td class="cell-check checked" data-tech="React">✓</td>
+                        <td class="cell-check" data-tech="Android">✗</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <button class="btn-primary" onclick="saveAssignments()">Save All Assignments</button>
+        </div>
+
+        <div class="summary-card">
+            <h2>Assignment Summary</h2>
+            <ul class="summary-list" id="summaryList">
+                <!-- Injected via JS -->
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <i>ℹ️</i>
+            <p>A faculty member must be assigned at least one technology to appear in the mentor selection list for students.</p>
+        </div>
+    </div>
+
+    <footer>
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <div id="toast">✅ Saved successfully! (Log entry created)</div>
+
+    <script>
+        // Matrix Interaction
+        const cells = document.querySelectorAll('.cell-check');
+        
+        cells.forEach(cell => {
+            cell.addEventListener('click', function() {
+                if(this.classList.contains('checked')) {
+                    this.classList.remove('checked');
+                    this.innerText = '✗';
+                } else {
+                    this.classList.add('checked');
+                    this.innerText = '✓';
+                }
+                updateSummary();
+            });
+        });
+
+        // Summary Update
+        function updateSummary() {
+            const tbody = document.querySelector('#matrixTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+            const summaryList = document.getElementById('summaryList');
+            summaryList.innerHTML = '';
+
+            rows.forEach(row => {
+                const facultyName = row.getAttribute('data-faculty');
+                const checkedCells = row.querySelectorAll('.cell-check.checked');
+                
+                const li = document.createElement('li');
+                li.className = 'summary-item';
+                
+                let html = `<strong>${facultyName}</strong>`;
+                
+                if(checkedCells.length === 0) {
+                    html += `<span class="pill" style="background:#888;">No Technology Assigned</span>`;
+                } else {
+                    checkedCells.forEach(cell => {
+                        const techName = cell.getAttribute('data-tech');
+                        html += `<span class="pill">${techName}</span>`;
+                    });
+                }
+                
+                li.innerHTML = html;
+                summaryList.appendChild(li);
+            });
+        }
+
+        // Initialize summary on load
+        updateSummary();
+
+        // Save Button Toast
+        function saveAssignments() {
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+</html>

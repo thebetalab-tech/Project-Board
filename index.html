@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Board</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Epilogue:wght@400;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Work+Sans:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "secondary-fixed-dim": "#8bd1e8",
+                "on-secondary-fixed": "#001f27",
+                "outline": "#857461",
+                "on-tertiary-fixed": "#001e2f",
+                "on-error": "#ffffff",
+                "on-background": "#231b00",
+                "inverse-surface": "#39300c",
+                "surface-tint": "#845400",
+                "surface-container-high": "#f9e7b4",
+                "primary-container": "#ee9b00",
+                "surface-container": "#ffedba",
+                "surface-container-highest": "#f3e2af",
+                "on-surface": "#231b00",
+                "surface": "#fff8ef",
+                "surface-dim": "#ead9a7",
+                "secondary": "#13677b",
+                "primary": "#845400",
+                "surface-container-low": "#fff3d4",
+                "on-primary-fixed": "#2a1800",
+                "on-secondary-container": "#18697e",
+                "outline-variant": "#d8c3ad",
+                "surface-variant": "#f3e2af",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#004e5f",
+                "on-tertiary-container": "#004564",
+                "on-surface-variant": "#534434",
+                "inverse-primary": "#ffb95a",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "tertiary-container": "#25b7ff",
+                "surface-bright": "#fff8ef",
+                "on-primary-container": "#5c3900",
+                "tertiary": "#006590",
+                "tertiary-fixed": "#c8e6ff",
+                "on-tertiary-fixed-variant": "#004c6e",
+                "tertiary-fixed-dim": "#88ceff",
+                "secondary-container": "#a1e7ff",
+                "background": "#fff8ef",
+                "primary-fixed-dim": "#ffb95a",
+                "on-primary": "#ffffff",
+                "error": "#ba1a1a",
+                "on-secondary": "#ffffff",
+                "primary-fixed": "#ffddb6",
+                "inverse-on-surface": "#fff0c7",
+                "secondary-fixed": "#b2ebff",
+                "on-tertiary": "#ffffff",
+                "on-primary-fixed-variant": "#643f00"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "margin-mobile": "16px",
+                "margin-desktop": "64px",
+                "unit": "8px",
+                "container-padding": "24px",
+                "gutter": "16px",
+                "container-max": "1280px",
+                "base": "8px"
+        },
+        "fontFamily": {
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "label-mono": [
+                        "JetBrains Mono"
+                ],
+                "label-caps": [
+                        "Epilogue"
+                ],
+                "display-lg": [
+                        "Playfair Display"
+                ],
+                "headline-md": [
+                        "Playfair Display"
+                ],
+                "headline-sm": [
+                        "Epilogue"
+                ],
+                "display-lg-mobile": [
+                        "Playfair Display"
+                ],
+                "body-md": [
+                        "Work Sans"
+                ],
+                "body-lg": [
+                        "Work Sans"
+                ]
+        },
+        "fontSize": {
+                "label-sm": [
+                        "13px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-mono": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-caps": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-lg": [
+                        "56px",
+                        {
+                                "lineHeight": "64px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "40px",
+                        {
+                                "lineHeight": "48px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        .sticker-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(35, 27, 0, 1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid rgba(35, 27, 0, 1);
+        }
+        .sticker-shadow:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(35, 27, 0, 1);
+        }
+        
+        .rough-border {
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            border: 2px solid rgba(35, 27, 0, 0.8);
+        }
+
+        .scanning-pulse {
+            animation: scan 1.5s infinite;
+        }
+        @keyframes scan {
+            0% { box-shadow: 0 0 0 0 rgba(132, 84, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(132, 84, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(132, 84, 0, 0); }
+        }
+
+        /* SVG draw-line: paused by default, triggered by JS */
+        .draw-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: none;
+        }
+        .draw-line.animate {
+            animation: draw 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #845400;
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: blink-cursor 0.75s step-end infinite;
+        }
+        @keyframes blink-cursor {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Fade-in-up entrance animation */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Slide-in-right for the demo card */
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(60px) rotate(2deg);
+            transition: opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0) rotate(2deg);
+        }
+
+        /* Scale-in for sticker badges */
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.5) rotate(-2deg);
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1) rotate(-2deg);
+        }
+
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Slide-in-left */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Scale-up for icons/badges on scroll */
+        .scroll-scale {
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .scroll-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Blur-in for subtle text reveals */
+        .blur-in {
+            opacity: 0;
+            filter: blur(8px);
+            transform: translateY(10px);
+            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+        }
+        .blur-in.visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        /* Rocket Playful Loop Animation */
+        .animate-rocket {
+            animation: rocket-fly-loop 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes rocket-fly-loop {
+            0% {
+                transform: translate3d(-600px, 400px, 0) rotate(-35deg) scale(0.6);
+                opacity: 0;
+            }
+            15% {
+                transform: translate3d(-300px, -200px, 0) rotate(-10deg) scale(1.3);
+                opacity: 1;
+            }
+            45% {
+                transform: translate3d(200px, -220px, 0) rotate(60deg) scale(1.5);
+            }
+            70% {
+                transform: translate3d(300px, 80px, 0) rotate(140deg) scale(1.2);
+            }
+            85% {
+                transform: translate3d(-100px, 150px, 0) rotate(220deg) scale(0.9);
+            }
+            93% {
+                transform: translate3d(-40px, 60px, 0) rotate(300deg) scale(1.0);
+            }
+            100% {
+                transform: translate3d(0, 0, 0) rotate(360deg) scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container paper-texture">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-base bg-surface/95 backdrop-blur-sm border-b-2 border-on-surface/20">
+<div class="flex items-center gap-3 font-display-lg-mobile text-[28px] font-bold text-on-surface">
+            <img src="logo.png" alt="Project Board Logo" class="w-14 h-14" />
+            Project Board
+        </div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 px-4 py-2 rounded-lg transition-colors font-headline-sm text-headline-sm" href="#problems">Problems</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 px-4 py-2 rounded-lg transition-colors font-headline-sm text-headline-sm" href="#how-it-works">How it Works</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 px-4 py-2 rounded-lg transition-colors font-headline-sm text-headline-sm" href="#roles">Roles</a>
+</div>
+<div class="flex items-center gap-base">
+<button class="hidden md:block font-headline-sm text-headline-sm text-on-surface-variant hover:text-on-surface px-4 py-2">Login</button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-headline-sm text-headline-sm sticker-shadow flex items-center gap-2 transform rotate-1">
+                Start Group
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</nav>
+<main class="pt-0">
+<!-- Hero Section -->
+<section class="min-h-[100vh] flex flex-col justify-center px-margin-mobile md:px-margin-desktop bg-surface-dim relative overflow-hidden pt-32 pb-24" id="hero-section">
+<div class="max-w-container-max mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="space-y-10">
+<div class="inline-block bg-primary text-on-primary px-6 py-3 rounded-full font-label-caps text-label-caps uppercase tracking-wider sticker-shadow transform -rotate-2 scale-in">
+                        Stop Wasting Time
+                    </div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background max-w-2xl leading-[1.1]" id="hero-heading" aria-label="Someone else is probably building your idea right now."></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed fade-in-up">
+                        Project Board catches duplicate ideas before your mentor does — so your team doesn't find out in week 6 that you're building the 5th "Hospital Management" system this semester.
+                    </p>
+</div>
+<!-- Signature Demo -->
+<div class="bg-surface-container-lowest p-10 rough-border shadow-xl transform rotate-2 relative z-20 slide-in-right" id="demo-card">
+<div class="mb-8">
+<label class="font-label-mono text-label-mono text-on-surface-variant block mb-3 uppercase tracking-widest font-bold">Check Idea Availability</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface rough-border focus:border-primary focus:outline-none transition-colors font-headline-sm text-headline-sm" id="demo-input" placeholder="e.g., Hospital Management" type="text"/>
+</div>
+</div>
+<div class="h-20 flex items-center gap-4 px-6 rough-border bg-surface-container transition-all duration-300 opacity-0" id="demo-result">
+<span class="material-symbols-outlined text-2xl" id="demo-icon">info</span>
+<span class="font-headline-sm text-headline-sm" id="demo-message">Type to scan...</span>
+</div>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute top-20 right-20 w-80 h-80 bg-primary-container rounded-full mix-blend-multiply filter blur-[80px] opacity-40 animate-pulse"></div>
+<div class="absolute bottom-10 left-10 w-64 h-64 bg-secondary-container rounded-full mix-blend-multiply filter blur-[60px] opacity-40"></div>
+</section>
+<!-- The Problem -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop bg-secondary-container text-on-secondary-container relative" id="problems">
+<div class="absolute inset-0 paper-texture mix-blend-overlay"></div>
+<div class="max-w-container-max mx-auto text-center space-y-10 relative z-10">
+<div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-secondary text-on-secondary sticker-shadow transform -rotate-3 mb-4 scroll-scale">
+<span class="material-symbols-outlined text-5xl">forum</span>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg max-w-4xl mx-auto leading-tight scroll-reveal"><span class="relative inline-block">WhatsApp chaos<svg class="absolute -bottom-2 left-0 w-full h-4 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20"><path class="draw-line" d="M 0 10 Q 25 5, 50 15 T 100 10" fill="none" stroke="#ba1a1a" stroke-linecap="round" stroke-width="4"></path></svg></span> is not a workflow.</h2>
+<p class="font-body-lg text-body-lg max-w-2xl mx-auto text-on-secondary-container/90 leading-relaxed scroll-reveal" style="transition-delay: 0.15s">
+                    Lost links, undocumented decisions, and 45 messages to decide on a tech stack. Get out of the chat and onto the board.
+                </p>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-40 px-margin-mobile md:px-margin-desktop bg-surface relative overflow-hidden">
+<div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-container/20 via-transparent to-transparent"></div>
+<div class="max-w-4xl mx-auto space-y-16 text-center relative z-10">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface blur-in">
+                    Ready to claim your idea?
+                </h2>
+<button id="cta-button" class="bg-primary-container text-on-primary-container px-12 py-6 rounded-full font-headline-md text-headline-md sticker-shadow hover:-translate-y-2 hover:rotate-2 transition-all flex items-center gap-6 mx-auto scroll-scale" style="transition-delay: 0.2s">
+                    Start your group
+                    <span class="material-symbols-outlined opacity-0 inline-block" style="font-size: 1.5em; transform-origin: center;" id="cta-rocket">rocket_launch</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-16 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8 bg-surface-container-high border-t-2 border-on-surface/10">
+<div class="font-display-lg-mobile text-2xl font-bold text-on-surface scroll-reveal">
+            Project Board
+        </div>
+<div class="flex flex-wrap gap-8 items-center font-body-md text-body-md text-on-surface-variant font-medium scroll-reveal" style="transition-delay: 0.1s">
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Privacy Policy</a>
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Terms of Service</a>
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Campus Directory</a>
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Contact Support</a>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant scroll-reveal" style="transition-delay: 0.2s">
+            © 2026 Project Board. A Sunlit Campus Initiative.
+        </div>
+</footer>
+<script>
+        // ==============================
+        // TYPING ANIMATION for Hero H1
+        // ==============================
+        (function() {
+            const heading = document.getElementById('hero-heading');
+            // The full sentence with markers for SVG decorations
+            const segments = [
+                { text: 'Someone else is ', type: 'plain' },
+                { text: 'probably', type: 'underline' },
+                { text: ' building your ', type: 'plain' },
+                { text: 'idea', type: 'circle' },
+                { text: ' right now.', type: 'plain' }
+            ];
+
+            const CHAR_DELAY = 30;       // ms per character
+            const SVG_DELAY = 120;       // pause before SVG draws in
+            let charIndex = 0;
+            let segIndex = 0;
+            let currentSpan = null;
+            let cursor = null;
+
+            function createCursor() {
+                cursor = document.createElement('span');
+                cursor.className = 'typing-cursor';
+                return cursor;
+            }
+
+            function removeCursor() {
+                if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+            }
+
+            function addUnderlineSVG(span) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'absolute -bottom-2 left-0 w-full h-4 overflow-visible');
+                svg.setAttribute('preserveAspectRatio', 'none');
+                svg.setAttribute('viewBox', '0 0 100 20');
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M 0 10 Q 25 5, 50 15 T 100 10');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#ee9b00');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-width', '4');
+                path.setAttribute('class', 'draw-line');
+                svg.appendChild(path);
+                span.appendChild(svg);
+                // Trigger animation after brief delay
+                setTimeout(() => path.classList.add('animate'), SVG_DELAY);
+            }
+
+            function addCircleSVG(span) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'absolute -inset-2 w-[calc(100%+16px)] h-[calc(100%+16px)] overflow-visible');
+                svg.setAttribute('preserveAspectRatio', 'none');
+                svg.setAttribute('viewBox', '0 0 100 50');
+                const ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+                ellipse.setAttribute('cx', '50');
+                ellipse.setAttribute('cy', '25');
+                ellipse.setAttribute('rx', '48');
+                ellipse.setAttribute('ry', '20');
+                ellipse.setAttribute('fill', 'none');
+                ellipse.setAttribute('stroke', '#ee9b00');
+                ellipse.setAttribute('stroke-width', '3');
+                ellipse.setAttribute('class', 'draw-line');
+                svg.appendChild(ellipse);
+                span.appendChild(svg);
+                setTimeout(() => ellipse.classList.add('animate'), SVG_DELAY);
+            }
+
+            function typeNextChar() {
+                if (segIndex >= segments.length) {
+                    // Done typing — remove cursor after a pause
+                    setTimeout(removeCursor, 1500);
+                    // Trigger remaining entrance animations
+                    triggerEntranceAnimations();
+                    return;
+                }
+
+                const seg = segments[segIndex];
+
+                // Create wrapper span for decorated segments on first char
+                if (charIndex === 0) {
+                    if (seg.type === 'underline' || seg.type === 'circle') {
+                        currentSpan = document.createElement('span');
+                        currentSpan.className = 'relative inline-block';
+                        removeCursor();
+                        heading.appendChild(currentSpan);
+                    } else {
+                        currentSpan = null;
+                    }
+                }
+
+                if (charIndex < seg.text.length) {
+                    removeCursor();
+                    const charNode = document.createTextNode(seg.text[charIndex]);
+                    if (currentSpan) {
+                        currentSpan.appendChild(charNode);
+                        currentSpan.appendChild(createCursor());
+                    } else {
+                        heading.appendChild(charNode);
+                        heading.appendChild(createCursor());
+                    }
+                    charIndex++;
+                    setTimeout(typeNextChar, CHAR_DELAY);
+                } else {
+                    // Segment done — add SVG if needed
+                    if (seg.type === 'underline') addUnderlineSVG(currentSpan);
+                    if (seg.type === 'circle') addCircleSVG(currentSpan);
+                    charIndex = 0;
+                    segIndex++;
+                    setTimeout(typeNextChar, seg.type !== 'plain' ? SVG_DELAY : 0);
+                }
+            }
+
+            // Start typing after a short load delay
+            setTimeout(typeNextChar, 600);
+        })();
+
+        // ==============================
+        // ENTRANCE ANIMATIONS
+        // ==============================
+        function triggerEntranceAnimations() {
+            // Stagger entrance animations for hero elements
+            const fadeEls = document.querySelectorAll('#hero-section .fade-in-up');
+            const slideEls = document.querySelectorAll('#hero-section .slide-in-right');
+            const scaleEls = document.querySelectorAll('#hero-section .scale-in');
+
+            scaleEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 150);
+            });
+
+            fadeEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), 200 + i * 200);
+            });
+
+            slideEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), 400 + i * 200);
+            });
+        }
+
+        // Also trigger scale-in for the badge before typing starts
+        setTimeout(() => {
+            document.querySelectorAll('#hero-section .scale-in').forEach(el => el.classList.add('visible'));
+        }, 300);
+
+        // ==============================
+        // SCROLL REVEAL OBSERVER (all animated elements)
+        // ==============================
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger rocket animation if this is the cta-button
+                    if (entry.target.id === 'cta-button') {
+                        triggerRocketAnimation();
+                    }
+                    // Also trigger draw-lines within this element
+                    entry.target.querySelectorAll('.draw-line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), 300 + i * 400);
+                    });
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
+
+        // Observe ALL scroll-animated elements across the page
+        document.querySelectorAll('.scroll-reveal, .scroll-scale, .slide-in-left, .blur-in').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // Fallback: Force reveal all elements if scrolled to the absolute bottom of the page
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50) {
+                document.querySelectorAll('.scroll-reveal:not(.visible), .scroll-scale:not(.visible), .slide-in-left:not(.visible), .blur-in:not(.visible)').forEach(el => {
+                    el.classList.add('visible');
+                    if (el.id === 'cta-button') {
+                        triggerRocketAnimation();
+                    }
+                    el.querySelectorAll('.draw-line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), 100 + i * 200);
+                    });
+                });
+            }
+        });
+
+        // Also observe sections for their draw-lines
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.draw-line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), i * 400);
+                    });
+                    sectionObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('section:not(#hero-section)').forEach(sec => sectionObserver.observe(sec));
+
+        // ==============================
+        // PLAYFUL ROCKET ANIMATION
+        // ==============================
+        let rocketAnimated = false;
+        function triggerRocketAnimation() {
+            if (rocketAnimated) return;
+            rocketAnimated = true;
+            
+            const rocket = document.getElementById('cta-rocket');
+            
+            // Show rocket and start animation
+            rocket.classList.remove('opacity-0');
+            void rocket.offsetWidth; // force reflow
+            
+            rocket.classList.add('animate-rocket');
+            
+            // Particle smoke trail loop
+            let startTime = null;
+            let lastSpawnTime = 0;
+            const spawnInterval = 20; // ms
+            const duration = 2000; // matching CSS animation duration (2s)
+            
+            function loop(now) {
+                if (!startTime) {
+                    startTime = now;
+                    lastSpawnTime = now;
+                }
+                
+                const elapsed = now - startTime;
+                if (elapsed < duration) {
+                    if (now - lastSpawnTime >= spawnInterval) {
+                        const rect = rocket.getBoundingClientRect();
+                        // Document-relative coordinates
+                        const x = rect.left + window.scrollX + rect.width / 2;
+                        const y = rect.top + window.scrollY + rect.height / 2;
+                        
+                        createSmokeParticle(x, y);
+                        lastSpawnTime = now;
+                    }
+                    requestAnimationFrame(loop);
+                } else {
+                    // Animation complete: clean up the animation class
+                    rocket.classList.remove('animate-rocket');
+                }
+            }
+            
+            // Start spawning smoke once motion begins
+            setTimeout(() => {
+                requestAnimationFrame(loop);
+            }, 50);
+        }
+
+        function createSmokeParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'absolute rounded-full pointer-events-none z-50';
+            particle.style.willChange = 'transform, opacity';
+            
+            const size = Math.random() * 12 + 10; // 10px to 22px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${x - size / 2}px`;
+            particle.style.top = `${y - size / 2}px`;
+            
+            // Warm/playful accent colors matching Material 3 theme
+            const colors = ['#ee9b00', '#ffb95a', '#ffddb6', '#8bd1e8'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.backgroundColor = randomColor;
+            particle.style.opacity = '0.85';
+            particle.style.filter = 'blur(2px)';
+            particle.style.transition = 'all 0.6s cubic-bezier(0.1, 0.8, 0.3, 1)';
+            
+            document.body.appendChild(particle);
+            
+            // Animate scale down and fade out
+            setTimeout(() => {
+                particle.style.transform = 'scale(0) translateY(-15px)';
+                particle.style.opacity = '0';
+            }, 10);
+            
+            // Clean up DOM
+            setTimeout(() => {
+                particle.remove();
+            }, 600);
+        }
+
+        // ==============================
+        // Simple Demo Interaction
+        // ==============================
+        const input = document.getElementById('demo-input');
+        const result = document.getElementById('demo-result');
+        const icon = document.getElementById('demo-icon');
+        const msg = document.getElementById('demo-message');
+        
+        let timeout = null;
+
+        input.addEventListener('input', (e) => {
+            clearTimeout(timeout);
+            const val = e.target.value.toLowerCase();
+            
+            if(val.length === 0) {
+                result.style.opacity = '0';
+                input.classList.remove('scanning-pulse');
+                return;
+            }
+
+            result.style.opacity = '0';
+            input.classList.add('scanning-pulse');
+            
+            timeout = setTimeout(() => {
+                input.classList.remove('scanning-pulse');
+                result.style.opacity = '1';
+                
+                if(val.includes('hospital') || val.includes('management') || val.includes('system')) {
+                    result.className = 'h-20 flex items-center gap-4 px-6 rough-border bg-error-container text-on-error-container transition-all duration-300 opacity-100 mt-6';
+                    icon.textContent = 'warning';
+                    icon.classList.add('fill');
+                    msg.textContent = 'Already claimed by Team Atharva';
+                } else {
+                    result.className = 'h-20 flex items-center gap-4 px-6 rough-border bg-primary-container text-on-primary-container transition-all duration-300 opacity-100 mt-6';
+                    icon.textContent = 'check_circle';
+                    icon.classList.add('fill');
+                    msg.textContent = 'This idea is available';
+                }
+            }, 800);
+        });
+    </script>
+</body>
+</html>

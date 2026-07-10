@@ -1,680 +1,777 @@
 <!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Board — One Project. One Group. Zero Duplicates.</title>
-  <meta name="description"
-    content="Project Board is a college project management platform with multi-layer duplicate detection. Register teams, pick tech stacks, get matched with mentors, and submit proposals — without collisions." />
-  <meta name="theme-color" content="#ffffff" />
+<html class="light" lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Board</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Epilogue:wght@400;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Work+Sans:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "secondary-fixed-dim": "#8bd1e8",
+                "on-secondary-fixed": "#001f27",
+                "outline": "#857461",
+                "on-tertiary-fixed": "#001e2f",
+                "on-error": "#ffffff",
+                "on-background": "#231b00",
+                "inverse-surface": "#39300c",
+                "surface-tint": "#845400",
+                "surface-container-high": "#f9e7b4",
+                "primary-container": "#ee9b00",
+                "surface-container": "#ffedba",
+                "surface-container-highest": "#f3e2af",
+                "on-surface": "#231b00",
+                "surface": "#fff8ef",
+                "surface-dim": "#ead9a7",
+                "secondary": "#13677b",
+                "primary": "#845400",
+                "surface-container-low": "#fff3d4",
+                "on-primary-fixed": "#2a1800",
+                "on-secondary-container": "#18697e",
+                "outline-variant": "#d8c3ad",
+                "surface-variant": "#f3e2af",
+                "surface-container-lowest": "#ffffff",
+                "on-secondary-fixed-variant": "#004e5f",
+                "on-tertiary-container": "#004564",
+                "on-surface-variant": "#534434",
+                "inverse-primary": "#ffb95a",
+                "error-container": "#ffdad6",
+                "on-error-container": "#93000a",
+                "tertiary-container": "#25b7ff",
+                "surface-bright": "#fff8ef",
+                "on-primary-container": "#5c3900",
+                "tertiary": "#006590",
+                "tertiary-fixed": "#c8e6ff",
+                "on-tertiary-fixed-variant": "#004c6e",
+                "tertiary-fixed-dim": "#88ceff",
+                "secondary-container": "#a1e7ff",
+                "background": "#fff8ef",
+                "primary-fixed-dim": "#ffb95a",
+                "on-primary": "#ffffff",
+                "error": "#ba1a1a",
+                "on-secondary": "#ffffff",
+                "primary-fixed": "#ffddb6",
+                "inverse-on-surface": "#fff0c7",
+                "secondary-fixed": "#b2ebff",
+                "on-tertiary": "#ffffff",
+                "on-primary-fixed-variant": "#643f00"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "margin-mobile": "16px",
+                "margin-desktop": "64px",
+                "unit": "8px",
+                "container-padding": "24px",
+                "gutter": "16px",
+                "container-max": "1280px",
+                "base": "8px"
+        },
+        "fontFamily": {
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "label-mono": [
+                        "JetBrains Mono"
+                ],
+                "label-caps": [
+                        "Epilogue"
+                ],
+                "display-lg": [
+                        "Playfair Display"
+                ],
+                "headline-md": [
+                        "Playfair Display"
+                ],
+                "headline-sm": [
+                        "Epilogue"
+                ],
+                "display-lg-mobile": [
+                        "Playfair Display"
+                ],
+                "body-md": [
+                        "Work Sans"
+                ],
+                "body-lg": [
+                        "Work Sans"
+                ]
+        },
+        "fontSize": {
+                "label-sm": [
+                        "13px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-mono": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.02em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "label-caps": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-lg": [
+                        "56px",
+                        {
+                                "lineHeight": "64px",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-sm": [
+                        "20px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg-mobile": [
+                        "40px",
+                        {
+                                "lineHeight": "48px",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        .sticker-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(35, 27, 0, 1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid rgba(35, 27, 0, 1);
+        }
+        .sticker-shadow:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px rgba(35, 27, 0, 1);
+        }
+        
+        .rough-border {
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            border: 2px solid rgba(35, 27, 0, 0.8);
+        }
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap"
-    rel="stylesheet" />
+        .scanning-pulse {
+            animation: scan 1.5s infinite;
+        }
+        @keyframes scan {
+            0% { box-shadow: 0 0 0 0 rgba(132, 84, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(132, 84, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(132, 84, 0, 0); }
+        }
 
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="glass.css" />
+        /* SVG draw-line: paused by default, triggered by JS */
+        .draw-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: none;
+        }
+        .draw-line.animate {
+            animation: draw 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+        }
+        @keyframes draw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .paper-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #845400;
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: blink-cursor 0.75s step-end infinite;
+        }
+        @keyframes blink-cursor {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Fade-in-up entrance animation */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Slide-in-right for the demo card */
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(60px) rotate(2deg);
+            transition: opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .slide-in-right.visible {
+            opacity: 1;
+            transform: translateX(0) rotate(2deg);
+        }
+
+        /* Scale-in for sticker badges */
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.5) rotate(-2deg);
+            transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1) rotate(-2deg);
+        }
+
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Slide-in-left */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        .slide-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Scale-up for icons/badges on scroll */
+        .scroll-scale {
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .scroll-scale.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Blur-in for subtle text reveals */
+        .blur-in {
+            opacity: 0;
+            filter: blur(8px);
+            transform: translateY(10px);
+            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+        }
+        .blur-in.visible {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+
+        /* Rocket Playful Loop Animation */
+        .animate-rocket {
+            animation: rocket-fly-loop 2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes rocket-fly-loop {
+            0% {
+                transform: translate3d(-600px, 400px, 0) rotate(-35deg) scale(0.6);
+                opacity: 0;
+            }
+            15% {
+                transform: translate3d(-300px, -200px, 0) rotate(-10deg) scale(1.3);
+                opacity: 1;
+            }
+            45% {
+                transform: translate3d(200px, -220px, 0) rotate(60deg) scale(1.5);
+            }
+            70% {
+                transform: translate3d(300px, 80px, 0) rotate(140deg) scale(1.2);
+            }
+            85% {
+                transform: translate3d(-100px, 150px, 0) rotate(220deg) scale(0.9);
+            }
+            93% {
+                transform: translate3d(-40px, 60px, 0) rotate(300deg) scale(1.0);
+            }
+            100% {
+                transform: translate3d(0, 0, 0) rotate(360deg) scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
-
-<body>
-
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <defs>
-      <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.011 0.011" numOctaves="2" seed="92" result="noise" />
-        <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
-        <feDisplacementMap in="SourceGraphic" in2="blurred" scale="200" xChannelSelector="R" yChannelSelector="G" />
-      </filter>
-    </defs>
-  </svg>
-
-  <!-- ============================================================
-       LOADER / INTRO
-       ============================================================ -->
-  <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader__inner">
-      <div class="loader__wordmark">
-        <span class="loader__word" data-letter="P">P</span>
-        <span class="loader__word" data-letter="R">R</span>
-        <span class="loader__word" data-letter="O">O</span>
-        <span class="loader__word" data-letter="J">J</span>
-        <span class="loader__word" data-letter="E">E</span>
-        <span class="loader__word" data-letter="C">C</span>
-        <span class="loader__word" data-letter="T">T</span>
-        <span class="loader__sep">&nbsp;</span>
-        <span class="loader__word" data-letter="B">B</span>
-        <span class="loader__word" data-letter="O">O</span>
-        <span class="loader__word" data-letter="A">A</span>
-        <span class="loader__word" data-letter="R">R</span>
-        <span class="loader__word" data-letter="D">D</span>
-      </div>
-      <div class="loader__bar">
-        <div class="loader__bar-fill"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ============================================================
-       NAVIGATION
-       ============================================================ -->
-  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
-    <a href="#hero" class="nav__logo" aria-label="Project Board home">
-      <span class="nav__logo-icon">⬡</span>
-      <span class="nav__logo-text">Project Board</span>
-    </a>
-    <div class="nav__links" id="navLinks">
-      <a href="#problem" class="nav__link">Problem</a>
-      <a href="#how-it-works" class="nav__link">How It Works</a>
-      <a href="#detection" class="nav__link">Detection</a>
-      <a href="#roles" class="nav__link">Roles</a>
-      <a href="#team" class="nav__link">Team</a>
-    </div>
-    <button class="nav__cta magnetic-btn" data-magnetic aria-label="Get Started">
-      <span>Get Started</span>
-    </button>
-    <button class="nav__burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-  </nav>
-
-  <!-- Mobile Menu Overlay -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <div class="mobile-menu__inner">
-      <a href="#problem" class="mobile-menu__link">Problem</a>
-      <a href="#how-it-works" class="mobile-menu__link">How It Works</a>
-      <a href="#detection" class="mobile-menu__link">Detection</a>
-      <a href="#roles" class="mobile-menu__link">Roles</a>
-      <a href="#team" class="mobile-menu__link">Team</a>
-      <a href="#cta" class="mobile-menu__link mobile-menu__link--cta">Get Started</a>
-    </div>
-  </div>
-
-  <main>
-
-    <!-- ============================================================
-         SECTION 1 — HERO
-         ============================================================ -->
-    <section class="hero" id="hero">
-      <div class="hero__bg-image" aria-hidden="true"></div>
-      <div class="hero__blur-layer" aria-hidden="true"></div>
-      <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
-      <div class="hero__gradient" aria-hidden="true"></div>
-      
-      <div class="container hero__grid">
-        <!-- Left: Headline & CTA -->
-        <div class="hero__left">
-          <h1 class="hero__headline hero__headline--compact">
-            <span class="line-wrap"><span class="anim-line">One Project.</span></span>
-            <span class="line-wrap"><span class="anim-line">One Group.</span></span>
-            <span class="line-wrap"><span class="anim-line">Zero <em>Duplicates.</em></span></span>
-          </h1>
-          <p class="hero__sub anim-text" style="text-align: left; margin: 0 0 var(--s-lg) 0; max-width: 400px;">
-            Register your team, pick a tech stack, and submit proposals with real-time detection.
-          </p>
-          <div class="hero__actions anim-text">
-            <a href="#how-it-works" class="btn btn--primary magnetic-btn" data-magnetic>
-              <span>See How It Works</span>
-              <svg class="btn__arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </a>
-            <a href="#detection" class="btn btn--ghost magnetic-btn" data-magnetic>
-              <span>Try the Demo</span>
-            </a>
-          </div>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container paper-texture">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-base bg-surface/95 backdrop-blur-sm border-b-2 border-on-surface/20">
+<div class="flex items-center gap-3 font-display-lg-mobile text-[28px] font-bold text-on-surface">
+            <img src="logo.png" alt="Project Board Logo" class="w-14 h-14" />
+            Project Board
         </div>
-
-        <!-- Right: Interactive Demo Visual -->
-        <div class="hero__right anim-text">
-          <div class="detection__demo" id="detectionDemo">
-            <div class="detection__demo-header">
-              <h3>Live Similarity Check</h3>
-            </div>
-            <div class="detection__demo-body">
-              <div class="detection__demo-input-wrap" style="display: flex; gap: var(--s-md); align-items: flex-end; margin-bottom: 0;">
-                <div style="position: relative; flex: 1;">
-                  <label for="demoInput" class="sr-only">Enter project name</label>
-                  <input type="text" id="demoInput" class="detection__demo-input"
-                    placeholder="e.g. Hospital Management System" autocomplete="off" />
-                  <div class="detection__demo-input-line"></div>
-                </div>
-                <button type="button" class="btn btn--primary" id="demoBtn" style="padding: 0.8em 1.5em;">Check</button>
-              </div>
-            </div>
-          </div>
+<div class="hidden md:flex gap-gutter items-center">
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 px-4 py-2 rounded-lg transition-colors font-headline-sm text-headline-sm" href="#problems">Problems</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 px-4 py-2 rounded-lg transition-colors font-headline-sm text-headline-sm" href="#how-it-works">How it Works</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 px-4 py-2 rounded-lg transition-colors font-headline-sm text-headline-sm" href="#roles">Roles</a>
+</div>
+<div class="flex items-center gap-base">
+<button class="hidden md:block font-headline-sm text-headline-sm text-on-surface-variant hover:text-on-surface px-4 py-2">Login</button>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-headline-sm text-headline-sm sticker-shadow flex items-center gap-2 transform rotate-1">
+                Start Group
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</nav>
+<main class="pt-0">
+<!-- Hero Section -->
+<section class="min-h-[100vh] flex flex-col justify-center px-margin-mobile md:px-margin-desktop bg-surface-dim relative overflow-hidden pt-32 pb-24" id="hero-section">
+<div class="max-w-container-max mx-auto w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+<div class="space-y-10">
+<div class="inline-block bg-primary text-on-primary px-6 py-3 rounded-full font-label-caps text-label-caps uppercase tracking-wider sticker-shadow transform -rotate-2 scale-in">
+                        Stop Wasting Time
+                    </div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-background max-w-2xl leading-[1.1]" id="hero-heading" aria-label="Someone else is probably building your idea right now."></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed fade-in-up">
+                        Project Board catches duplicate ideas before your mentor does — so your team doesn't find out in week 6 that you're building the 5th "Hospital Management" system this semester.
+                    </p>
+</div>
+<!-- Signature Demo -->
+<div class="bg-surface-container-lowest p-10 rough-border shadow-xl transform rotate-2 relative z-20 slide-in-right" id="demo-card">
+<div class="mb-8">
+<label class="font-label-mono text-label-mono text-on-surface-variant block mb-3 uppercase tracking-widest font-bold">Check Idea Availability</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface rough-border focus:border-primary focus:outline-none transition-colors font-headline-sm text-headline-sm" id="demo-input" placeholder="e.g., Hospital Management" type="text"/>
+</div>
+</div>
+<div class="h-20 flex items-center gap-4 px-6 rough-border bg-surface-container transition-all duration-300 opacity-0" id="demo-result">
+<span class="material-symbols-outlined text-2xl" id="demo-icon">info</span>
+<span class="font-headline-sm text-headline-sm" id="demo-message">Type to scan...</span>
+</div>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute top-20 right-20 w-80 h-80 bg-primary-container rounded-full mix-blend-multiply filter blur-[80px] opacity-40 animate-pulse"></div>
+<div class="absolute bottom-10 left-10 w-64 h-64 bg-secondary-container rounded-full mix-blend-multiply filter blur-[60px] opacity-40"></div>
+</section>
+<!-- The Problem -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop bg-secondary-container text-on-secondary-container relative" id="problems">
+<div class="absolute inset-0 paper-texture mix-blend-overlay"></div>
+<div class="max-w-container-max mx-auto text-center space-y-10 relative z-10">
+<div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-secondary text-on-secondary sticker-shadow transform -rotate-3 mb-4 scroll-scale">
+<span class="material-symbols-outlined text-5xl">forum</span>
+</div>
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg max-w-4xl mx-auto leading-tight scroll-reveal"><span class="relative inline-block">WhatsApp chaos<svg class="absolute -bottom-2 left-0 w-full h-4 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 20"><path class="draw-line" d="M 0 10 Q 25 5, 50 15 T 100 10" fill="none" stroke="#ba1a1a" stroke-linecap="round" stroke-width="4"></path></svg></span> is not a workflow.</h2>
+<p class="font-body-lg text-body-lg max-w-2xl mx-auto text-on-secondary-container/90 leading-relaxed scroll-reveal" style="transition-delay: 0.15s">
+                    Lost links, undocumented decisions, and 45 messages to decide on a tech stack. Get out of the chat and onto the board.
+                </p>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-40 px-margin-mobile md:px-margin-desktop bg-surface relative overflow-hidden">
+<div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-container/20 via-transparent to-transparent"></div>
+<div class="max-w-4xl mx-auto space-y-16 text-center relative z-10">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface blur-in">
+                    Ready to claim your idea?
+                </h2>
+<button id="cta-button" class="bg-primary-container text-on-primary-container px-12 py-6 rounded-full font-headline-md text-headline-md sticker-shadow hover:-translate-y-2 hover:rotate-2 transition-all flex items-center gap-6 mx-auto scroll-scale" style="transition-delay: 0.2s">
+                    Start your group
+                    <span class="material-symbols-outlined opacity-0 inline-block" style="font-size: 1.5em; transform-origin: center;" id="cta-rocket">rocket_launch</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-16 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8 bg-surface-container-high border-t-2 border-on-surface/10">
+<div class="font-display-lg-mobile text-2xl font-bold text-on-surface scroll-reveal">
+            Project Board
         </div>
-      </div>
-    </section>
-    
-    <!-- ============================================================
-         MARQUEE TICKER
-         ============================================================ -->
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee__track">
-        <span class="marquee__item">STUDENTS</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">FACULTY</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">ADMIN</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">NO DUPLICATES</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">SMART DETECTION</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">STUDENTS</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">FACULTY</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">ADMIN</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">NO DUPLICATES</span>
-        <span class="marquee__dot">◆</span>
-        <span class="marquee__item">SMART DETECTION</span>
-        <span class="marquee__dot">◆</span>
-      </div>
-    </div>
-
-    <!-- ============================================================
-         SECTION 2 — THE PROBLEM
-         ============================================================ -->
-    <section class="problem" id="problem">
-      <div class="container">
-        <div class="problem__label anim-text">
-          <span class="section-number">01</span>
-          <span class="section-label">The Problem</span>
+<div class="flex flex-wrap gap-8 items-center font-body-md text-body-md text-on-surface-variant font-medium scroll-reveal" style="transition-delay: 0.1s">
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Privacy Policy</a>
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Terms of Service</a>
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Campus Directory</a>
+<a class="hover:text-primary hover:underline decoration-2 underline-offset-4 transition-all" href="#">Contact Support</a>
+</div>
+<div class="font-body-md text-body-md text-on-surface-variant scroll-reveal" style="transition-delay: 0.2s">
+            © 2026 Project Board. A Sunlit Campus Initiative.
         </div>
-        <h2 class="problem__headline">
-          <span class="line-wrap"><span class="anim-line">Two groups.</span></span>
-          <span class="line-wrap"><span class="anim-line">Same semester.</span></span>
-          <span class="line-wrap"><span class="anim-line">Same exact <em>project.</em></span></span>
-        </h2>
-        <div class="problem__visual">
-          <div class="problem__card problem__card--left anim-card">
-            <div class="problem__card-badge problem__card-badge--red">Group A</div>
-            <h3 class="problem__card-title">"Hospital Management System"</h3>
-            <div class="problem__card-tech">
-              <span>ASP.NET</span><span>C#</span><span>SQL Server</span>
-            </div>
-            <div class="problem__card-status problem__card-status--submitted">Submitted</div>
-          </div>
-          <div class="problem__vs anim-text">
-            <span class="problem__vs-text">VS</span>
-            <div class="problem__vs-line"></div>
-          </div>
-          <div class="problem__card problem__card--right anim-card">
-            <div class="problem__card-badge problem__card-badge--red">Group B</div>
-            <h3 class="problem__card-title">"HMS – Hospital Software"</h3>
-            <div class="problem__card-tech">
-              <span>ASP.NET</span><span>C#</span><span>SQL Server</span>
-            </div>
-            <div class="problem__card-status problem__card-status--submitted">Submitted</div>
-          </div>
-        </div>
-        <div class="problem__result anim-text">
-          <div class="problem__result-icon">⚠</div>
-          <p class="problem__result-text">
-            Same concept, same tech stack, different name — slipped through every manual check.
-            <strong>Faculty only caught it at the demo stage.</strong> Both teams lost weeks of work.
-          </p>
-        </div>
-        <div class="problem__after anim-text">
-          <p class="problem__after-label">With Project Board →</p>
-          <p class="problem__after-text">
-            Caught at <strong>proposal submission</strong>. Automatically. Before a single line of code.
-          </p>
-        </div>
-      </div>
-    </section>
+</footer>
+<script>
+        // ==============================
+        // TYPING ANIMATION for Hero H1
+        // ==============================
+        (function() {
+            const heading = document.getElementById('hero-heading');
+            // The full sentence with markers for SVG decorations
+            const segments = [
+                { text: 'Someone else is ', type: 'plain' },
+                { text: 'probably', type: 'underline' },
+                { text: ' building your ', type: 'plain' },
+                { text: 'idea', type: 'circle' },
+                { text: ' right now.', type: 'plain' }
+            ];
 
-    <!-- ============================================================
-         SECTION 3 — HOW IT WORKS (Horizontal Scroll / Pinned)
-         ============================================================ -->
-    <section class="how" id="how-it-works">
-      <div class="how__sticky">
-        <div class="how__header">
-          <div class="how__label anim-text">
-            <span class="section-number">02</span>
-            <span class="section-label">How It Works</span>
-          </div>
-          <h2 class="how__headline anim-text">From registration to approval — in seven steps.</h2>
-        </div>
-        <div class="how__track-wrapper">
-          <div class="how__track" id="howTrack">
-            <!-- Step 1 -->
-            <article class="how__step">
-              <div class="how__step-number">01</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="16" r="8" stroke="currentColor" stroke-width="2" />
-                  <path d="M8 42c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Register</h3>
-              <p class="how__step-desc">Create your account as a Student, Faculty Mentor, or Admin. The Group Leader
-                kicks things off.</p>
-            </article>
-            <!-- Step 2 -->
-            <article class="how__step">
-              <div class="how__step-number">02</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="16" cy="18" r="6" stroke="currentColor" stroke-width="2" />
-                  <circle cx="32" cy="18" r="6" stroke="currentColor" stroke-width="2" />
-                  <path d="M6 38c0-5.523 4.477-10 10-10h2m14 0h2c5.523 0 10 4.477 10 10" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" />
-                  <path d="M24 24v8m-4-4h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Form Group</h3>
-              <p class="how__step-desc">The Group Leader creates a group and invites members by enrollment number. Teams
-                are locked on confirmation.</p>
-            </article>
-            <!-- Step 3 -->
-            <article class="how__step">
-              <div class="how__step-number">03</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2" />
-                  <path d="M16 18h16M16 24h10M16 30h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Pick Tech Stack</h3>
-              <p class="how__step-desc">Select your development stack from an admin-approved list — ASP.NET, Python
-                Flask, React, or whatever's approved this semester.</p>
-            </article>
-            <!-- Step 4 -->
-            <article class="how__step">
-              <div class="how__step-number">04</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="16" r="8" stroke="currentColor" stroke-width="2" />
-                  <path d="M12 42c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" />
-                  <path d="M34 14l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Select Mentor</h3>
-              <p class="how__step-desc">Choose from available faculty mentors. Mentor capacity is capped to ensure
-                quality guidance for every group.</p>
-            </article>
-            <!-- Step 5 -->
-            <article class="how__step">
-              <div class="how__step-number">05</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <path d="M10 38V14a4 4 0 014-4h20a4 4 0 014 4v24" stroke="currentColor" stroke-width="2" />
-                  <path d="M18 20l4 4 8-8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                  <path d="M6 38h36" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Submit Proposal</h3>
-              <p class="how__step-desc">Enter your project title, description, and keywords. The duplicate detection
-                engine runs instantly — you'll know immediately if there's a conflict.</p>
-            </article>
-            <!-- Step 6 -->
-            <article class="how__step">
-              <div class="how__step-number">06</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <circle cx="24" cy="24" r="16" stroke="currentColor" stroke-width="2" />
-                  <path d="M24 14v10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                  <path d="M36 10l2-2M12 10l-2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Faculty Review</h3>
-              <p class="how__step-desc">Your assigned mentor independently reviews the proposal. They see similarity
-                scores too — a second, unbiased check before approval.</p>
-            </article>
-            <!-- Step 7 -->
-            <article class="how__step">
-              <div class="how__step-number">07</div>
-              <div class="how__step-icon">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                  <path
-                    d="M24 4l6.928 14.036L46 20.584l-11 10.716L37.856 46 24 38.964 10.144 46 13 31.3 2 20.584l15.072-2.548z"
-                    stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                </svg>
-              </div>
-              <h3 class="how__step-title">Approved</h3>
-              <p class="how__step-desc">Green light. Your project is locked in, keywords are tagged, and the database
-                ensures no future group can submit the same concept in the same stack.</p>
-            </article>
-          </div>
-        </div>
-        <!-- Progress indicator -->
-        <div class="how__progress">
-          <div class="how__progress-bar" id="howProgressBar"></div>
-        </div>
-      </div>
-    </section>
+            const CHAR_DELAY = 30;       // ms per character
+            const SVG_DELAY = 120;       // pause before SVG draws in
+            let charIndex = 0;
+            let segIndex = 0;
+            let currentSpan = null;
+            let cursor = null;
 
-    <!-- ============================================================
-         SECTION 4 — DUPLICATE DETECTION ENGINE
-         ============================================================ -->
-    <section class="detection" id="detection">
-      <div class="container">
-        <div class="detection__label anim-text">
-          <span class="section-number">03</span>
-          <span class="section-label">The Detection Engine</span>
-        </div>
-        <h2 class="detection__headline">
-          <span class="line-wrap"><span class="anim-line">Four layers of</span></span>
-          <span class="line-wrap"><span class="anim-line">defense against</span></span>
-          <span class="line-wrap"><span class="anim-line"><em>duplicate projects.</em></span></span>
-        </h2>
+            function createCursor() {
+                cursor = document.createElement('span');
+                cursor.className = 'typing-cursor';
+                return cursor;
+            }
 
-        <!-- Layer diagram -->
-        <div class="detection__layers">
-          <div class="detection__layer" data-layer="1">
-            <div class="detection__layer-num">L1</div>
-            <div class="detection__layer-content">
-              <h3>Student Warning</h3>
-              <p>At submission time, the system normalizes your title, extracts keywords, and runs Jaccard similarity
-                scoring against every approved project in the same tech stack. If there's a potential match, you see an
-                <strong>advisory warning</strong> before you even submit.</p>
-            </div>
-            <div class="detection__layer-tag">Advisory</div>
-          </div>
-          <div class="detection__layer-connector" aria-hidden="true">
-            <svg width="2" height="48" viewBox="0 0 2 48">
-              <line x1="1" y1="0" x2="1" y2="48" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
-            </svg>
-          </div>
-          <div class="detection__layer" data-layer="2">
-            <div class="detection__layer-num">L2</div>
-            <div class="detection__layer-content">
-              <h3>Faculty Review</h3>
-              <p>Your mentor sees the same similarity scores independently. They approve, flag, or reject — a human
-                checkpoint that catches what algorithms can't: conceptual overlap hidden behind different wording.</p>
-            </div>
-            <div class="detection__layer-tag">Human Check</div>
-          </div>
-          <div class="detection__layer-connector" aria-hidden="true">
-            <svg width="2" height="48" viewBox="0 0 2 48">
-              <line x1="1" y1="0" x2="1" y2="48" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
-            </svg>
-          </div>
-          <div class="detection__layer" data-layer="3">
-            <div class="detection__layer-num">L3</div>
-            <div class="detection__layer-content">
-              <h3>Keyword Tagging</h3>
-              <p>Once approved, normalized keywords are stored in the database. Every future submission is checked
-                against this ever-growing index. The real gatekeeper — works across semesters and sections.</p>
-            </div>
-            <div class="detection__layer-tag">Database</div>
-          </div>
-          <div class="detection__layer-connector" aria-hidden="true">
-            <svg width="2" height="48" viewBox="0 0 2 48">
-              <line x1="1" y1="0" x2="1" y2="48" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
-            </svg>
-          </div>
-          <div class="detection__layer" data-layer="4">
-            <div class="detection__layer-num">L4</div>
-            <div class="detection__layer-content">
-              <h3>Admin Audit</h3>
-              <p>Admins have a bird's-eye view of every project across all groups and tech stacks. The final safety net
-                — full override power and system-wide duplicate reports.</p>
-            </div>
-            <div class="detection__layer-tag">Final Net</div>
-          </div>
-        </div>
+            function removeCursor() {
+                if (cursor && cursor.parentNode) cursor.parentNode.removeChild(cursor);
+            }
 
+            function addUnderlineSVG(span) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'absolute -bottom-2 left-0 w-full h-4 overflow-visible');
+                svg.setAttribute('preserveAspectRatio', 'none');
+                svg.setAttribute('viewBox', '0 0 100 20');
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', 'M 0 10 Q 25 5, 50 15 T 100 10');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#ee9b00');
+                path.setAttribute('stroke-linecap', 'round');
+                path.setAttribute('stroke-width', '4');
+                path.setAttribute('class', 'draw-line');
+                svg.appendChild(path);
+                span.appendChild(svg);
+                // Trigger animation after brief delay
+                setTimeout(() => path.classList.add('animate'), SVG_DELAY);
+            }
 
-      </div>
-    </section>
+            function addCircleSVG(span) {
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('class', 'absolute -inset-2 w-[calc(100%+16px)] h-[calc(100%+16px)] overflow-visible');
+                svg.setAttribute('preserveAspectRatio', 'none');
+                svg.setAttribute('viewBox', '0 0 100 50');
+                const ellipse = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+                ellipse.setAttribute('cx', '50');
+                ellipse.setAttribute('cy', '25');
+                ellipse.setAttribute('rx', '48');
+                ellipse.setAttribute('ry', '20');
+                ellipse.setAttribute('fill', 'none');
+                ellipse.setAttribute('stroke', '#ee9b00');
+                ellipse.setAttribute('stroke-width', '3');
+                ellipse.setAttribute('class', 'draw-line');
+                svg.appendChild(ellipse);
+                span.appendChild(svg);
+                setTimeout(() => ellipse.classList.add('animate'), SVG_DELAY);
+            }
 
-    <!-- ============================================================
-         SECTION 5 — BUILT FOR EVERYONE (Roles)
-         ============================================================ -->
-    <section class="roles" id="roles">
-      <div class="container">
-        <div class="roles__label anim-text">
-          <span class="section-number">04</span>
-          <span class="section-label">Built For Everyone</span>
-        </div>
-        <h2 class="roles__headline">
-          <span class="line-wrap"><span class="anim-line">Three roles.</span></span>
-          <span class="line-wrap"><span class="anim-line">One unified <em>platform.</em></span></span>
-        </h2>
-        <div class="roles__grid">
-          <!-- Student Card -->
-          <article class="role-card anim-card" data-role="student">
-            <div class="role-card__icon">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <path d="M20 4L4 12l16 8 16-8-16-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                <path d="M8 16v10c0 4 5.373 8 12 8s12-4 12-8V16" stroke="currentColor" stroke-width="2" />
-                <path d="M36 12v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              </svg>
-            </div>
-            <h3 class="role-card__title">Student</h3>
-            <p class="role-card__subtitle">Group Leader &amp; Members</p>
-            <ul class="role-card__list">
-              <li>Create or join a project group with enrolled classmates</li>
-              <li>Select a technology stack and faculty mentor</li>
-              <li>Submit proposals with real-time duplicate warnings</li>
-              <li>Track project status from submission to approval</li>
-            </ul>
-          </article>
-          <!-- Faculty Card -->
-          <article class="role-card anim-card" data-role="faculty">
-            <div class="role-card__icon">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <circle cx="20" cy="12" r="8" stroke="currentColor" stroke-width="2" />
-                <path d="M6 36c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" />
-                <path d="M28 8l4-4M30 12h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-              </svg>
-            </div>
-            <h3 class="role-card__title">Faculty Mentor</h3>
-            <p class="role-card__subtitle">Independent Reviewer</p>
-            <ul class="role-card__list">
-              <li>Review proposals assigned to your mentee groups</li>
-              <li>See similarity scores and keyword overlap reports</li>
-              <li>Approve, flag for revision, or reject projects</li>
-              <li>Manage group capacity to maintain quality guidance</li>
-            </ul>
-          </article>
-          <!-- Admin Card -->
-          <article class="role-card anim-card" data-role="admin">
-            <div class="role-card__icon">
-              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <rect x="6" y="6" width="28" height="28" rx="4" stroke="currentColor" stroke-width="2" />
-                <path d="M6 14h28M14 14v20M14 22h12M14 28h8" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" />
-              </svg>
-            </div>
-            <h3 class="role-card__title">Admin</h3>
-            <p class="role-card__subtitle">System Governor</p>
-            <ul class="role-card__list">
-              <li>Configure semesters, tech stacks, and mentor pools</li>
-              <li>View system-wide duplicate reports across all groups</li>
-              <li>Override decisions and resolve edge-case conflicts</li>
-              <li>Full audit log for accountability and compliance</li>
-            </ul>
-          </article>
-        </div>
+            function typeNextChar() {
+                if (segIndex >= segments.length) {
+                    // Done typing — remove cursor after a pause
+                    setTimeout(removeCursor, 1500);
+                    // Trigger remaining entrance animations
+                    triggerEntranceAnimations();
+                    return;
+                }
 
-        <!-- Counter stats -->
-        <div class="roles__stats">
-          <div class="stat anim-text">
-            <span class="stat__number" data-count="5">0</span>
-            <span class="stat__label">Detection Layers</span>
-          </div>
-          <div class="stat anim-text">
-            <span class="stat__number" data-count="3">0</span>
-            <span class="stat__label">User Roles</span>
-          </div>
-          <div class="stat anim-text">
-            <span class="stat__number" data-count="7">0</span>
-            <span class="stat__label">Step Workflow</span>
-          </div>
-          <div class="stat anim-text">
-            <span class="stat__number" data-count="0">0</span>
-            <span class="stat__suffix">%</span>
-            <span class="stat__label">Duplicate Tolerance</span>
-          </div>
-        </div>
-      </div>
-    </section>
+                const seg = segments[segIndex];
 
-    <!-- ============================================================
-         SECTION 6 — TECH STACK (Marquee)
-         ============================================================ -->
-    <section class="tech" id="tech">
-      <div class="container">
-        <div class="tech__label anim-text">
-          <span class="section-number">05</span>
-          <span class="section-label">Built With</span>
-        </div>
-        <h2 class="tech__headline anim-text">The technology behind the platform.</h2>
-      </div>
-      <div class="tech__marquee">
-        <div class="tech__marquee-track">
-          <div class="tech__tag">ASP.NET Web Forms</div>
-          <div class="tech__tag">C#</div>
-          <div class="tech__tag">ADO.NET</div>
-          <div class="tech__tag">SQL Server</div>
-          <div class="tech__tag">Bootstrap 5</div>
-          <div class="tech__tag">JavaScript</div>
-          <div class="tech__tag">Jaccard Similarity</div>
-          <div class="tech__tag">Keyword Extraction</div>
-          <!-- Duplicate set for seamless loop -->
-          <div class="tech__tag">ASP.NET Web Forms</div>
-          <div class="tech__tag">C#</div>
-          <div class="tech__tag">ADO.NET</div>
-          <div class="tech__tag">SQL Server</div>
-          <div class="tech__tag">Bootstrap 5</div>
-          <div class="tech__tag">JavaScript</div>
-          <div class="tech__tag">Jaccard Similarity</div>
-          <div class="tech__tag">Keyword Extraction</div>
-        </div>
-      </div>
-      <div class="tech__marquee tech__marquee--reverse">
-        <div class="tech__marquee-track">
-          <div class="tech__tag">Stored Procedures</div>
-          <div class="tech__tag">Session Management</div>
-          <div class="tech__tag">Role-Based Access</div>
-          <div class="tech__tag">Server-Side Validation</div>
-          <div class="tech__tag">AJAX</div>
-          <div class="tech__tag">NLP Normalization</div>
-          <div class="tech__tag">Master Pages</div>
-          <div class="tech__tag">Data Binding</div>
-          <!-- Duplicate set for seamless loop -->
-          <div class="tech__tag">Stored Procedures</div>
-          <div class="tech__tag">Session Management</div>
-          <div class="tech__tag">Role-Based Access</div>
-          <div class="tech__tag">Server-Side Validation</div>
-          <div class="tech__tag">AJAX</div>
-          <div class="tech__tag">NLP Normalization</div>
-          <div class="tech__tag">Master Pages</div>
-          <div class="tech__tag">Data Binding</div>
-        </div>
-      </div>
-    </section>
+                // Create wrapper span for decorated segments on first char
+                if (charIndex === 0) {
+                    if (seg.type === 'underline' || seg.type === 'circle') {
+                        currentSpan = document.createElement('span');
+                        currentSpan.className = 'relative inline-block';
+                        removeCursor();
+                        heading.appendChild(currentSpan);
+                    } else {
+                        currentSpan = null;
+                    }
+                }
 
-    <!-- ============================================================
-         SECTION 7 — TEAM / CREDITS
-         ============================================================ -->
-    <section class="team" id="team">
-      <div class="container">
-        <div class="team__label anim-text">
-          <span class="section-number">06</span>
-          <span class="section-label">The Team</span>
-        </div>
-        <h2 class="team__headline">
-          <span class="line-wrap"><span class="anim-line">Built by students,</span></span>
-          <span class="line-wrap"><span class="anim-line">for <em>students.</em></span></span>
-        </h2>
-        <div class="team__grid">
-          <article class="team-card anim-card">
-            <div class="team-card__avatar">
-              <span>TJ</span>
-            </div>
-            <h3 class="team-card__name">Tirth Joshi</h3>
-            <p class="team-card__role">Group Leader</p>
-            <p class="team-card__desc">Architecture, detection engine, and full-stack development.</p>
-          </article>
-          <article class="team-card anim-card">
-            <div class="team-card__avatar">
-              <span>SD</span>
-            </div>
-            <h3 class="team-card__name">Sujal Domadiya</h3>
-            <p class="team-card__role">Member</p>
-            <p class="team-card__desc">Database design, stored procedures, and server-side logic.</p>
-          </article>
-          <article class="team-card anim-card">
-            <div class="team-card__avatar">
-              <span>RR</span>
-            </div>
-            <h3 class="team-card__name">Rudra Rangpariya</h3>
-            <p class="team-card__role">Member</p>
-            <p class="team-card__desc">UI/UX, frontend integration, and responsive design.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+                if (charIndex < seg.text.length) {
+                    removeCursor();
+                    const charNode = document.createTextNode(seg.text[charIndex]);
+                    if (currentSpan) {
+                        currentSpan.appendChild(charNode);
+                        currentSpan.appendChild(createCursor());
+                    } else {
+                        heading.appendChild(charNode);
+                        heading.appendChild(createCursor());
+                    }
+                    charIndex++;
+                    setTimeout(typeNextChar, CHAR_DELAY);
+                } else {
+                    // Segment done — add SVG if needed
+                    if (seg.type === 'underline') addUnderlineSVG(currentSpan);
+                    if (seg.type === 'circle') addCircleSVG(currentSpan);
+                    charIndex = 0;
+                    segIndex++;
+                    setTimeout(typeNextChar, seg.type !== 'plain' ? SVG_DELAY : 0);
+                }
+            }
 
-    <!-- ============================================================
-         SECTION 8 — CTA / FOOTER
-         ============================================================ -->
-    <section class="cta-section" id="cta">
-      <div class="container">
-        <h2 class="cta-section__headline">
-          <span class="line-wrap"><span class="anim-line">Ready to build</span></span>
-          <span class="line-wrap"><span class="anim-line">something <em>original?</em></span></span>
-        </h2>
-        <p class="cta-section__sub anim-text">
-          Stop worrying about duplicate projects. Start building.
-        </p>
-        <a href="#hero" class="btn btn--primary btn--large magnetic-btn anim-text" data-magnetic>
-          <span>Get Started with Project Board</span>
-          <svg class="btn__arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </a>
-      </div>
-    </section>
+            // Start typing after a short load delay
+            setTimeout(typeNextChar, 600);
+        })();
 
-  </main>
+        // ==============================
+        // ENTRANCE ANIMATIONS
+        // ==============================
+        function triggerEntranceAnimations() {
+            // Stagger entrance animations for hero elements
+            const fadeEls = document.querySelectorAll('#hero-section .fade-in-up');
+            const slideEls = document.querySelectorAll('#hero-section .slide-in-right');
+            const scaleEls = document.querySelectorAll('#hero-section .scale-in');
 
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__left">
-        <span class="footer__logo">⬡ Project Board</span>
-        <p class="footer__copy">&copy; 2026 Project Board. A college project management platform.</p>
-      </div>
-      <div class="footer__right">
-        <a href="#hero" class="footer__link">Home</a>
-        <a href="#how-it-works" class="footer__link">How It Works</a>
-        <a href="#detection" class="footer__link">Detection</a>
-        <a href="#team" class="footer__link">Team</a>
-      </div>
-    </div>
-  </footer>
+            scaleEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), i * 150);
+            });
 
-  <!-- ============================================================
-       SCRIPTS — GSAP + ScrollTrigger + Lenis via CDN
-       ============================================================ -->
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/ScrollTrigger.min.js"></script>
+            fadeEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), 200 + i * 200);
+            });
 
+            slideEls.forEach((el, i) => {
+                setTimeout(() => el.classList.add('visible'), 400 + i * 200);
+            });
+        }
 
+        // Also trigger scale-in for the badge before typing starts
+        setTimeout(() => {
+            document.querySelectorAll('#hero-section .scale-in').forEach(el => el.classList.add('visible'));
+        }, 300);
 
-  <script src="script.js"></script>
+        // ==============================
+        // SCROLL REVEAL OBSERVER (all animated elements)
+        // ==============================
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger rocket animation if this is the cta-button
+                    if (entry.target.id === 'cta-button') {
+                        triggerRocketAnimation();
+                    }
+                    // Also trigger draw-lines within this element
+                    entry.target.querySelectorAll('.draw-line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), 300 + i * 400);
+                    });
+                    scrollObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
 
+        // Observe ALL scroll-animated elements across the page
+        document.querySelectorAll('.scroll-reveal, .scroll-scale, .slide-in-left, .blur-in').forEach(el => {
+            scrollObserver.observe(el);
+        });
+
+        // Fallback: Force reveal all elements if scrolled to the absolute bottom of the page
+        window.addEventListener('scroll', () => {
+            if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 50) {
+                document.querySelectorAll('.scroll-reveal:not(.visible), .scroll-scale:not(.visible), .slide-in-left:not(.visible), .blur-in:not(.visible)').forEach(el => {
+                    el.classList.add('visible');
+                    if (el.id === 'cta-button') {
+                        triggerRocketAnimation();
+                    }
+                    el.querySelectorAll('.draw-line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), 100 + i * 200);
+                    });
+                });
+            }
+        });
+
+        // Also observe sections for their draw-lines
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.draw-line').forEach((line, i) => {
+                        setTimeout(() => line.classList.add('animate'), i * 400);
+                    });
+                    sectionObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('section:not(#hero-section)').forEach(sec => sectionObserver.observe(sec));
+
+        // ==============================
+        // PLAYFUL ROCKET ANIMATION
+        // ==============================
+        let rocketAnimated = false;
+        function triggerRocketAnimation() {
+            if (rocketAnimated) return;
+            rocketAnimated = true;
+            
+            const rocket = document.getElementById('cta-rocket');
+            
+            // Show rocket and start animation
+            rocket.classList.remove('opacity-0');
+            void rocket.offsetWidth; // force reflow
+            
+            rocket.classList.add('animate-rocket');
+            
+            // Particle smoke trail loop
+            let startTime = null;
+            let lastSpawnTime = 0;
+            const spawnInterval = 20; // ms
+            const duration = 2000; // matching CSS animation duration (2s)
+            
+            function loop(now) {
+                if (!startTime) {
+                    startTime = now;
+                    lastSpawnTime = now;
+                }
+                
+                const elapsed = now - startTime;
+                if (elapsed < duration) {
+                    if (now - lastSpawnTime >= spawnInterval) {
+                        const rect = rocket.getBoundingClientRect();
+                        // Document-relative coordinates
+                        const x = rect.left + window.scrollX + rect.width / 2;
+                        const y = rect.top + window.scrollY + rect.height / 2;
+                        
+                        createSmokeParticle(x, y);
+                        lastSpawnTime = now;
+                    }
+                    requestAnimationFrame(loop);
+                } else {
+                    // Animation complete: clean up the animation class
+                    rocket.classList.remove('animate-rocket');
+                }
+            }
+            
+            // Start spawning smoke once motion begins
+            setTimeout(() => {
+                requestAnimationFrame(loop);
+            }, 50);
+        }
+
+        function createSmokeParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'absolute rounded-full pointer-events-none z-50';
+            particle.style.willChange = 'transform, opacity';
+            
+            const size = Math.random() * 12 + 10; // 10px to 22px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${x - size / 2}px`;
+            particle.style.top = `${y - size / 2}px`;
+            
+            // Warm/playful accent colors matching Material 3 theme
+            const colors = ['#ee9b00', '#ffb95a', '#ffddb6', '#8bd1e8'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.backgroundColor = randomColor;
+            particle.style.opacity = '0.85';
+            particle.style.filter = 'blur(2px)';
+            particle.style.transition = 'all 0.6s cubic-bezier(0.1, 0.8, 0.3, 1)';
+            
+            document.body.appendChild(particle);
+            
+            // Animate scale down and fade out
+            setTimeout(() => {
+                particle.style.transform = 'scale(0) translateY(-15px)';
+                particle.style.opacity = '0';
+            }, 10);
+            
+            // Clean up DOM
+            setTimeout(() => {
+                particle.remove();
+            }, 600);
+        }
+
+        // ==============================
+        // Simple Demo Interaction
+        // ==============================
+        const input = document.getElementById('demo-input');
+        const result = document.getElementById('demo-result');
+        const icon = document.getElementById('demo-icon');
+        const msg = document.getElementById('demo-message');
+        
+        let timeout = null;
+
+        input.addEventListener('input', (e) => {
+            clearTimeout(timeout);
+            const val = e.target.value.toLowerCase();
+            
+            if(val.length === 0) {
+                result.style.opacity = '0';
+                input.classList.remove('scanning-pulse');
+                return;
+            }
+
+            result.style.opacity = '0';
+            input.classList.add('scanning-pulse');
+            
+            timeout = setTimeout(() => {
+                input.classList.remove('scanning-pulse');
+                result.style.opacity = '1';
+                
+                if(val.includes('hospital') || val.includes('management') || val.includes('system')) {
+                    result.className = 'h-20 flex items-center gap-4 px-6 rough-border bg-error-container text-on-error-container transition-all duration-300 opacity-100 mt-6';
+                    icon.textContent = 'warning';
+                    icon.classList.add('fill');
+                    msg.textContent = 'Already claimed by Team Atharva';
+                } else {
+                    result.className = 'h-20 flex items-center gap-4 px-6 rough-border bg-primary-container text-on-primary-container transition-all duration-300 opacity-100 mt-6';
+                    icon.textContent = 'check_circle';
+                    icon.classList.add('fill');
+                    msg.textContent = 'This idea is available';
+                }
+            }, 800);
+        });
+    </script>
 </body>
-
 </html>

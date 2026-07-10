@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Students - Project Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219; --teal: #005f73; --cyan: #0a9396; --aqua: #94d2bd;
+            --custard: #e9d8a6; --orange: #ee9b00; --rust: #ca6702;
+            --sienna: #bb3e03; --clay: #ae2012; --brick: #9b2226;
+            --font-head: 'DM Serif Display', serif; --font-body: 'DM Sans', sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background-color: var(--custard); color: var(--ink); display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        
+        .navbar { background-color: var(--brick); color: white; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; }
+        .navbar .logo { font-family: var(--font-head); font-size: 1.5rem; text-decoration: none; color: white; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; }
+        .nav-links a.active, .nav-links a:hover { color: var(--orange); text-decoration: underline; }
+        .nav-right { display: flex; align-items: center; gap: 1rem; }
+        .admin-badge { background-color: var(--orange); color: var(--ink); padding: 4px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }
+        
+        .page-header { padding: 2rem 2rem 1rem; }
+        .breadcrumb { font-size: 0.9rem; color: var(--ink); opacity: 0.8; margin-bottom: 0.5rem; }
+        .page-title { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .subtitle { color: var(--ink); font-size: 1.1rem; opacity: 0.9; }
+        
+        .main-content { flex: 1; padding: 1rem 2rem 2rem; display: flex; flex-direction: column; gap: 1rem; }
+        
+        .card { background: white; border: 1px solid var(--rust); border-radius: 8px; box-shadow: 0 2px 12px rgba(0,18,25,0.08); padding: 1.5rem; overflow-x: auto; }
+        
+        .filter-row { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;}
+        input, select { border: 1px solid var(--aqua); border-radius: 6px; padding: 10px 14px; background: white; font-family: var(--font-body); outline: none; }
+        input:focus, select:focus { outline: 2px solid var(--cyan); border-color: var(--cyan); }
+        .search-input { flex: 2; min-width: 200px; }
+        .filter-select { flex: 1; min-width: 150px; }
+        .btn-primary { background-color: var(--orange); color: var(--ink); font-weight: 700; border-radius: 6px; padding: 10px 20px; border: none; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+        .btn-primary:hover { background-color: var(--rust); color: white; }
+        
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th, td { padding: 12px 16px; text-align: left; vertical-align: middle; }
+        th { background-color: var(--brick); color: white; font-weight: 700; }
+        tr { transition: background 0.2s; border-bottom: 1px solid #eee; }
+        tr:nth-child(even) { background-color: var(--custard); }
+        tr:nth-child(odd) { background-color: white; }
+        tr:hover { border-left: 3px solid var(--orange); }
+        tr.inactive { opacity: 0.6; }
+        
+        .avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--teal); color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
+        .flex-cell { display: flex; align-items: center; gap: 1rem; }
+        
+        .badge { border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 700; display: inline-block; }
+        .badge.active { background-color: var(--cyan); color: white; }
+        .badge.inactive { background-color: var(--clay); color: white; }
+        .group-none { color: #888; font-style: italic; }
+        
+        .btn-text { background: none; border: none; font-weight: bold; cursor: pointer; text-decoration: underline; font-family: var(--font-body); font-size: 0.9rem; margin-right: 0.8rem; }
+        .btn-text.cyan { color: var(--cyan); }
+        .btn-text.clay { color: var(--clay); }
+        .btn-text.aqua { color: var(--teal); }
+
+        .pagination { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; font-size: 0.9rem; }
+        .page-btns { display: flex; gap: 0.5rem; }
+        .page-btn { padding: 6px 12px; border: 1px solid var(--aqua); background: white; border-radius: 4px; cursor: pointer; }
+        .page-btn.active { background: var(--cyan); color: white; border-color: var(--cyan); }
+        
+        /* Drawer */
+        .drawer-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,18,25,0.5); z-index: 100; opacity: 0; transition: opacity 0.3s; }
+        .drawer { position: fixed; top: 0; right: -400px; width: 400px; max-width: 100%; height: 100%; background: white; z-index: 101; transition: right 0.3s ease; padding: 2rem; box-shadow: -2px 0 12px rgba(0,18,25,0.1); overflow-y: auto; }
+        .drawer.open { right: 0; }
+        .drawer-overlay.open { display: block; opacity: 1; }
+        .drawer-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; float: right; color: var(--ink); }
+        .drawer-title { font-family: var(--font-head); font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--teal); clear: both; }
+        .drawer-info { margin-bottom: 1rem; }
+        .drawer-info label { font-weight: bold; color: var(--rust); font-size: 0.85rem; text-transform: uppercase; }
+        .drawer-info p { font-size: 1.1rem; margin-top: 0.2rem; }
+        
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,18,25,0.5); z-index: 200; align-items: center; justify-content: center; }
+        .modal { background: white; padding: 2rem; border-radius: 8px; max-width: 400px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.15); border: 1px solid var(--rust); }
+        .modal h3 { font-family: var(--font-head); font-size: 1.5rem; margin-bottom: 1rem; color: var(--clay); }
+        .modal p { margin-bottom: 1.5rem; }
+        .modal-actions { display: flex; justify-content: center; gap: 1rem; }
+        .btn-danger { background-color: var(--clay); color: white; font-weight: 700; border-radius: 6px; padding: 10px 20px; border: none; cursor: pointer; }
+        .btn-danger:hover { background-color: var(--brick); }
+        .btn-secondary { background-color: transparent; border: 2px solid var(--cyan); color: var(--cyan); font-weight: 700; border-radius: 6px; padding: 8px 18px; cursor: pointer; }
+        .btn-secondary:hover { background-color: var(--cyan); color: white; }
+        
+        footer { background-color: var(--ink); color: white; text-align: center; padding: 1rem; font-size: 0.9rem; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="admin-dashboard.html" class="logo">Project Board</a>
+        <div class="nav-links">
+            <a href="admin-dashboard.html">Dashboard</a>
+            <a href="manage-users.html" class="active">Users</a>
+            <a href="manage-faculty.html">Faculty</a>
+            <a href="manage-technology.html">Technologies</a>
+            <a href="#">All Groups</a>
+            <a href="#">All Projects</a>
+        </div>
+        <div class="nav-right">
+            <span class="admin-badge">Admin</span>
+            <span>System Admin</span>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="breadcrumb">Dashboard &gt; Manage Students</div>
+        <h1 class="page-title">Manage Students</h1>
+        <p class="subtitle">48 students registered</p>
+    </div>
+
+    <div class="main-content">
+        <div class="card">
+            <div class="filter-row">
+                <input type="text" class="search-input" placeholder="Search by name, enrollment no...">
+                <select class="filter-select">
+                    <option>All Departments</option>
+                    <option>Computer Engineering (CE)</option>
+                    <option>Information Technology (IT)</option>
+                </select>
+                <select class="filter-select">
+                    <option>All Status</option>
+                    <option>Active</option>
+                    <option>Inactive</option>
+                </select>
+                <button class="btn-primary">+ Export CSV</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Enrollment</th>
+                        <th>Dept</th>
+                        <th>Group</th>
+                        <th>Status</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="row-1">
+                        <td>
+                            <div class="flex-cell">
+                                <div class="avatar">TJ</div>
+                                <strong>Tirth Joshi</strong>
+                            </div>
+                        </td>
+                        <td>24020201071</td>
+                        <td>CE</td>
+                        <td>Team Syntax Error</td>
+                        <td><span class="badge active" id="badge-1">Active</span></td>
+                        <td>15 Jun 2026</td>
+                        <td>
+                            <button class="btn-text cyan" onclick="openDrawer('Tirth Joshi', '24020201071', 'CE', 'Team Syntax Error', 'Active')">View</button>
+                            <button class="btn-text clay" id="btn-toggle-1" onclick="confirmDeactivate('row-1', 'Tirth Joshi')">Deactivate</button>
+                        </td>
+                    </tr>
+                    <tr id="row-2">
+                        <td>
+                            <div class="flex-cell">
+                                <div class="avatar">RR</div>
+                                <strong>Rudra Rangpariya</strong>
+                            </div>
+                        </td>
+                        <td>24020201148</td>
+                        <td>CE</td>
+                        <td>Team Syntax Error</td>
+                        <td><span class="badge active" id="badge-2">Active</span></td>
+                        <td>15 Jun 2026</td>
+                        <td>
+                            <button class="btn-text cyan" onclick="openDrawer('Rudra Rangpariya', '24020201148', 'CE', 'Team Syntax Error', 'Active')">View</button>
+                            <button class="btn-text clay" id="btn-toggle-2" onclick="confirmDeactivate('row-2', 'Rudra Rangpariya')">Deactivate</button>
+                        </td>
+                    </tr>
+                    <tr id="row-3">
+                        <td>
+                            <div class="flex-cell">
+                                <div class="avatar">SD</div>
+                                <strong>Sujal Domadiya</strong>
+                            </div>
+                        </td>
+                        <td>24020201046</td>
+                        <td>CE</td>
+                        <td>Team Syntax Error</td>
+                        <td><span class="badge active" id="badge-3">Active</span></td>
+                        <td>16 Jun 2026</td>
+                        <td>
+                            <button class="btn-text cyan" onclick="openDrawer('Sujal Domadiya', '24020201046', 'CE', 'Team Syntax Error', 'Active')">View</button>
+                            <button class="btn-text clay" id="btn-toggle-3" onclick="confirmDeactivate('row-3', 'Sujal Domadiya')">Deactivate</button>
+                        </td>
+                    </tr>
+                    <tr id="row-4">
+                        <td>
+                            <div class="flex-cell">
+                                <div class="avatar">AV</div>
+                                <strong>Avni Vora</strong>
+                            </div>
+                        </td>
+                        <td>24020201022</td>
+                        <td>IT</td>
+                        <td>Team ByteForce</td>
+                        <td><span class="badge active" id="badge-4">Active</span></td>
+                        <td>14 Jun 2026</td>
+                        <td>
+                            <button class="btn-text cyan" onclick="openDrawer('Avni Vora', '24020201022', 'IT', 'Team ByteForce', 'Active')">View</button>
+                            <button class="btn-text clay" id="btn-toggle-4" onclick="confirmDeactivate('row-4', 'Avni Vora')">Deactivate</button>
+                        </td>
+                    </tr>
+                    <tr id="row-5">
+                        <td>
+                            <div class="flex-cell">
+                                <div class="avatar">PM</div>
+                                <strong>Parth Modi</strong>
+                            </div>
+                        </td>
+                        <td>24020201033</td>
+                        <td>CE</td>
+                        <td><span class="group-none">None</span></td>
+                        <td><span class="badge active" id="badge-5">Active</span></td>
+                        <td>18 Jun 2026</td>
+                        <td>
+                            <button class="btn-text cyan" onclick="openDrawer('Parth Modi', '24020201033', 'CE', 'None', 'Active')">View</button>
+                            <button class="btn-text clay" id="btn-toggle-5" onclick="confirmDeactivate('row-5', 'Parth Modi')">Deactivate</button>
+                        </td>
+                    </tr>
+                    <tr id="row-6" class="inactive">
+                        <td>
+                            <div class="flex-cell">
+                                <div class="avatar">RK</div>
+                                <strong>Raj Kumar</strong>
+                            </div>
+                        </td>
+                        <td>24020201077</td>
+                        <td>CE</td>
+                        <td><span class="group-none">None</span></td>
+                        <td><span class="badge inactive" id="badge-6">Inactive</span></td>
+                        <td>10 Jun 2026</td>
+                        <td>
+                            <button class="btn-text cyan" onclick="openDrawer('Raj Kumar', '24020201077', 'CE', 'None', 'Inactive')">View</button>
+                            <button class="btn-text aqua" id="btn-toggle-6" onclick="activateUser('row-6', 'Raj Kumar')">Activate</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="pagination">
+                <span>Showing 1-6 of 48 students</span>
+                <div class="page-btns">
+                    <button class="page-btn">Previous</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <div class="drawer" id="studentDrawer">
+        <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+        <h2 class="drawer-title" id="d-name">Student Name</h2>
+        
+        <div class="drawer-info">
+            <label>Enrollment Number</label>
+            <p id="d-enroll">24020201000</p>
+        </div>
+        <div class="drawer-info">
+            <label>Department</label>
+            <p id="d-dept">Computer Engineering</p>
+        </div>
+        <div class="drawer-info">
+            <label>Current Group</label>
+            <p id="d-group">Team Syntax Error</p>
+        </div>
+        <div class="drawer-info">
+            <label>Status</label>
+            <p id="d-status"><span class="badge active">Active</span></p>
+        </div>
+        <div class="drawer-info" style="margin-top: 2rem;">
+            <label>Recent Activity</label>
+            <p style="font-size: 0.9rem; color: #555;">- Logged in 2 hours ago<br>- Submitted project idea on 18 Jun<br>- Joined group on 15 Jun</p>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="deactivateModal">
+        <div class="modal">
+            <h3>Confirm Deactivation</h3>
+            <p>Are you sure you want to deactivate <strong id="modal-student-name">Student</strong>? They will not be able to log in or participate in groups.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-danger" onclick="executeDeactivate()">Deactivate Account</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRowId = null;
+
+        function openDrawer(name, enroll, dept, group, status) {
+            document.getElementById('d-name').innerText = name;
+            document.getElementById('d-enroll').innerText = enroll;
+            document.getElementById('d-dept').innerText = dept;
+            document.getElementById('d-group').innerText = group;
+            
+            let statusHtml = status === 'Active' 
+                ? '<span class="badge active">Active</span>' 
+                : '<span class="badge inactive">Inactive</span>';
+            document.getElementById('d-status').innerHTML = statusHtml;
+
+            document.getElementById('drawerOverlay').classList.add('open');
+            document.getElementById('studentDrawer').classList.add('open');
+        }
+
+        function closeDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('open');
+            document.getElementById('studentDrawer').classList.remove('open');
+        }
+
+        function confirmDeactivate(rowId, name) {
+            currentRowId = rowId;
+            document.getElementById('modal-student-name').innerText = name;
+            document.getElementById('deactivateModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('deactivateModal').style.display = 'none';
+            currentRowId = null;
+        }
+
+        function executeDeactivate() {
+            if (currentRowId) {
+                const row = document.getElementById(currentRowId);
+                row.classList.add('inactive');
+                
+                const idNum = currentRowId.split('-')[1];
+                const badge = document.getElementById('badge-' + idNum);
+                badge.className = 'badge inactive';
+                badge.innerText = 'Inactive';
+                
+                const btn = document.getElementById('btn-toggle-' + idNum);
+                btn.className = 'btn-text aqua';
+                btn.innerText = 'Activate';
+                // Update onclick for activation
+                const name = document.getElementById('modal-student-name').innerText;
+                btn.setAttribute('onclick', `activateUser('${currentRowId}', '${name}')`);
+            }
+            closeModal();
+        }
+
+        function activateUser(rowId, name) {
+            const row = document.getElementById(rowId);
+            row.classList.remove('inactive');
+            
+            const idNum = rowId.split('-')[1];
+            const badge = document.getElementById('badge-' + idNum);
+            badge.className = 'badge active';
+            badge.innerText = 'Active';
+            
+            const btn = document.getElementById('btn-toggle-' + idNum);
+            btn.className = 'btn-text clay';
+            btn.innerText = 'Deactivate';
+            btn.setAttribute('onclick', `confirmDeactivate('${rowId}', '${name}')`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Requests - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo-text {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* Nav Bar */
+        .navbar {
+            background-color: var(--teal);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .navbar-left { display: flex; align-items: center; gap: 1rem; }
+        .logo-text { font-size: 1.5rem; text-decoration: none; color: white; }
+        .faculty-label { background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .navbar-middle { display: flex; gap: 1.5rem; }
+        .nav-link { color: white; text-decoration: none; font-weight: 500; padding-bottom: 0.25rem; transition: all 0.2s; }
+        .nav-link.active, .nav-link:hover { color: var(--orange); border-bottom: 2px solid var(--orange); }
+        .navbar-right { display: flex; align-items: center; gap: 1.5rem; }
+        .bell-icon { position: relative; cursor: pointer; font-size: 1.25rem; }
+        .badge-count { position: absolute; top: -5px; right: -8px; background-color: var(--orange); color: var(--ink); font-size: 0.65rem; font-weight: bold; padding: 2px 5px; border-radius: 10px; }
+        .user-profile { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .avatar { width: 32px; height: 32px; background-color: var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+
+        /* Page Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header { margin-bottom: 2rem; }
+        .page-title { font-size: 2.5rem; color: var(--ink); margin-bottom: 0.5rem; }
+        .breadcrumb { font-size: 0.9rem; color: var(--teal); font-weight: 500; }
+
+        /* Two Column Layout */
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Sidebar - Proposals */
+        .proposal-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .proposal-item {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border-left: 4px solid transparent;
+        }
+
+        .proposal-item:hover {
+            border-color: var(--cyan);
+            background: rgba(255,255,255,0.8);
+        }
+
+        .proposal-item.active {
+            border-left-color: var(--orange);
+            background: rgba(233, 216, 166, 0.4);
+            border-color: var(--orange);
+        }
+
+        .prop-title { font-weight: bold; font-size: 1.1rem; color: var(--ink); margin-bottom: 0.25rem; }
+        .prop-group { font-size: 0.9rem; color: var(--teal); }
+        .prop-date { font-size: 0.8rem; color: #666; margin-top: 0.5rem; }
+
+        /* Main Review Panel */
+        .review-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+        }
+
+        .project-details-title { font-size: 2rem; color: var(--ink); margin-bottom: 1rem; }
+        .project-meta { display: flex; gap: 1rem; margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--teal); flex-wrap: wrap; }
+        .project-meta span { background: rgba(0, 95, 115, 0.1); padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+        
+        .functionality-box {
+            background: rgba(233, 216, 166, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--teal);
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .toggle-link { color: var(--cyan); text-decoration: none; font-weight: bold; cursor: pointer; }
+
+        /* Duplicate Detection Panel */
+        .duplicate-panel {
+            background-color: rgba(238, 155, 0, 0.1);
+            border: 2px solid var(--orange);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .dup-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+        .dup-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--sienna); }
+        .dup-subtitle { margin-bottom: 1.5rem; color: var(--ink); }
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 6px; overflow: hidden; margin-bottom: 1.5rem; }
+        th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        th { font-weight: 700; color: white; background-color: var(--sienna); }
+        tr:nth-child(even) { background-color: rgba(238, 155, 0, 0.05); }
+
+        .score-high { color: var(--clay); font-weight: bold; }
+        .score-med { color: var(--sienna); font-weight: bold; }
+
+        .dup-footer-text { font-size: 0.85rem; font-style: italic; color: var(--sienna); margin-bottom: 1rem; }
+
+        /* Disclosure Button */
+        .disclosure-btn {
+            background: var(--custard);
+            border: 1px solid var(--orange);
+            color: var(--ink);
+            width: 100%;
+            padding: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .disclosure-btn:hover { background: var(--orange); }
+
+        /* Decision Section */
+        .decision-section {
+            display: none;
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .decision-section textarea {
+            width: 100%;
+            border: 1px solid var(--aqua);
+            border-radius: 6px;
+            padding: 12px;
+            font-family: inherit;
+            margin-bottom: 1.5rem;
+            resize: vertical;
+        }
+        .decision-section textarea:focus { outline: 2px solid var(--cyan); border-color: var(--cyan); }
+
+        .action-buttons { display: flex; gap: 1rem; }
+
+        .btn { padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; transition: all 0.2s; flex: 1; text-align: center; }
+        .btn-clay { background-color: var(--clay); color: white; }
+        .btn-clay:hover { background-color: var(--brick); }
+        .btn-aqua { background-color: var(--aqua); color: var(--ink); }
+        .btn-aqua:hover { filter: brightness(0.9); }
+        .btn-orange { background-color: var(--orange); color: var(--ink); width: 100%; }
+        .btn-orange:hover { background-color: var(--rust); color: white; }
+
+        /* Keyword Tagging Panel */
+        .keyword-panel {
+            display: none;
+            background: rgba(148, 210, 189, 0.1);
+            border: 2px solid var(--aqua);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            animation: slideDown 0.3s ease;
+        }
+
+        .keyword-panel h3 { font-family: 'DM Serif Display', serif; color: var(--teal); margin-bottom: 0.5rem; }
+        .tag-input-container { margin-bottom: 1rem; }
+        .tag-input { width: 100%; padding: 10px 14px; border: 1px solid var(--teal); border-radius: 6px; margin-bottom: 0.5rem; }
+        
+        .tags-display { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .tag-pill {
+            background: var(--aqua);
+            color: var(--ink);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tag-pill .remove { cursor: pointer; font-weight: bold; }
+        
+        .suggested-tags { font-size: 0.85rem; color: var(--teal); margin-bottom: 1rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .suggested-chip { background: white; border: 1px solid var(--teal); padding: 2px 8px; border-radius: 12px; cursor: pointer; }
+
+        /* Footer */
+        footer { background-color: var(--ink); color: white; text-align: center; padding: 1.5rem; font-size: 0.9rem; margin-top: auto; }
+
+        @media (max-width: 992px) {
+            .layout-grid { grid-template-columns: 1fr; }
+            .proposal-list { flex-direction: row; overflow-x: auto; padding-bottom: 1rem; }
+            .proposal-item { min-width: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="logo-text">Project Board</a>
+            <span class="faculty-label">Faculty Portal</span>
+        </div>
+        <div class="navbar-middle">
+            <a href="faculty-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="group-requests.html" class="nav-link">Group Requests</a>
+            <a href="project-requests.html" class="nav-link active">Project Reviews</a>
+            <a href="approved-projects.html" class="nav-link">Approved Projects</a>
+            <a href="generate-report.html" class="nav-link">Generate Report</a>
+        </div>
+        <div class="navbar-right">
+            <div class="bell-icon">🔔<span class="badge-count">3</span></div>
+            <div class="user-profile">
+                <div class="avatar">AS</div>
+                <span style="font-weight: 500;">Prof. Akash</span>
+                <span>▾</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb">3 proposals awaiting your decision</div>
+            <h1 class="page-title">Project Proposal Reviews</h1>
+        </div>
+
+        <div class="layout-grid">
+            <!-- Sidebar -->
+            <div class="proposal-list">
+                <div class="proposal-item active">
+                    <div class="prop-title">Hospital Management System</div>
+                    <div class="prop-group">Team Code Kings</div>
+                    <div class="prop-date">Submitted: 18 June 2026</div>
+                </div>
+                <div class="proposal-item">
+                    <div class="prop-title">Library Management System</div>
+                    <div class="prop-group">Team Debuggers</div>
+                    <div class="prop-date">Submitted: 16 June 2026</div>
+                </div>
+                <div class="proposal-item">
+                    <div class="prop-title">Smart Attendance System</div>
+                    <div class="prop-group">Team Alpha</div>
+                    <div class="prop-date">Submitted: 15 June 2026</div>
+                </div>
+            </div>
+
+            <!-- Main Panel -->
+            <div class="review-panel">
+                
+                <div class="card">
+                    <h2 class="project-details-title">Hospital Management System</h2>
+                    <div class="project-meta">
+                        <span>Type: UDP</span>
+                        <span>Submitted by: Team Code Kings</span>
+                        <span>18 June 2026</span>
+                    </div>
+                    <div class="functionality-box">
+                        A web-based system to manage hospital operations including patient registration, doctor assignment, appointment booking, billing, and discharge. It includes dedicated portals for doctors to view their schedules and patients to access their records and prescriptions online.
+                    </div>
+                    <a class="toggle-link">Show Full Description ▾</a>
+                </div>
+
+                <div class="duplicate-panel">
+                    <div class="dup-header">
+                        <span style="font-size: 1.5rem;">⚠️</span>
+                        <h3 class="dup-title">Similarity Alert — Review Before Approving</h3>
+                    </div>
+                    <p class="dup-subtitle">The following approved projects in PHP share keywords with this proposal.</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Existing Project Title</th>
+                                <th>Group</th>
+                                <th>Status</th>
+                                <th>Match Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Hospital Patient Records</td>
+                                <td>Team Gamma</td>
+                                <td><span style="background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; color: var(--teal);">Approved</span></td>
+                                <td class="score-high">87%</td>
+                            </tr>
+                            <tr>
+                                <td>Hospital Management (2025 Batch)</td>
+                                <td>Team Legacy</td>
+                                <td><span style="background: rgba(255,255,255,0.8); padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; color: var(--teal);">Approved</span></td>
+                                <td class="score-med">71%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <hr style="border: 0; border-top: 1px solid rgba(202, 103, 2, 0.3); margin-bottom: 1rem;">
+                    <p class="dup-footer-text">You are the final gatekeeper. If you approve this despite matches, your decision is logged.</p>
+
+                    <button class="disclosure-btn" onclick="toggleDecision()">
+                        I have reviewed the list above — proceed to decision <span id="disclosure-arrow">▾</span>
+                    </button>
+                </div>
+
+                <div class="decision-section" id="decisionSection">
+                    <textarea rows="3" placeholder="Add a remark (required for rejection, optional for approval)..."></textarea>
+                    <div class="action-buttons">
+                        <button class="btn btn-clay" onclick="rejectProject()">✗ Reject Proposal</button>
+                        <button class="btn btn-aqua" onclick="showKeywordPanel()">✓ Approve & Tag Keywords</button>
+                    </div>
+                </div>
+
+                <div class="keyword-panel" id="keywordPanel">
+                    <h3>Add domain keywords for this project</h3>
+                    <p style="margin-bottom: 1rem; color: var(--ink);">Tagging helps catch future duplicates effectively.</p>
+                    
+                    <div class="tag-input-container">
+                        <input type="text" class="tag-input" placeholder="Type keyword and press Enter..." id="tagInput">
+                    </div>
+
+                    <div class="suggested-tags">
+                        <strong>Suggested:</strong>
+                        <span class="suggested-chip" onclick="addTag('hospital')">+ hospital</span>
+                        <span class="suggested-chip" onclick="addTag('patient')">+ patient</span>
+                        <span class="suggested-chip" onclick="addTag('doctor')">+ doctor</span>
+                        <span class="suggested-chip" onclick="addTag('appointment')">+ appointment</span>
+                        <span class="suggested-chip" onclick="addTag('billing')">+ billing</span>
+                    </div>
+
+                    <div class="tags-display" id="tagsDisplay">
+                        <!-- Tags will appear here -->
+                    </div>
+
+                    <button class="btn btn-orange" onclick="finalizeApproval()">Save Keywords & Finalize Approval</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <script>
+        function toggleDecision() {
+            const section = document.getElementById('decisionSection');
+            const arrow = document.getElementById('disclosure-arrow');
+            if(section.style.display === 'block') {
+                section.style.display = 'none';
+                arrow.innerText = '▾';
+            } else {
+                section.style.display = 'block';
+                arrow.innerText = '▴';
+            }
+        }
+
+        function showKeywordPanel() {
+            document.getElementById('keywordPanel').style.display = 'block';
+            document.getElementById('decisionSection').style.display = 'none'; // Hide decision after picking approve
+            
+            // Auto add couple of tags for demo
+            addTag('hospital');
+            addTag('management');
+        }
+
+        function rejectProject() {
+            alert('Proposal Rejected. Notification sent to students.');
+            // In real app, redirect or move to next
+        }
+
+        function finalizeApproval() {
+            alert('Project Approved and tagged successfully!');
+            // In real app, redirect or load next proposal
+        }
+
+        // Simple tag manager logic
+        document.getElementById('tagInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && this.value.trim() !== '') {
+                addTag(this.value.trim().toLowerCase());
+                this.value = '';
+            }
+        });
+
+        function addTag(text) {
+            const container = document.getElementById('tagsDisplay');
+            // Check if exists
+            let exists = false;
+            container.querySelectorAll('.tag-pill span').forEach(el => {
+                if(el.innerText === text) exists = true;
+            });
+            if(exists) return;
+
+            const pill = document.createElement('div');
+            pill.className = 'tag-pill';
+            pill.innerHTML = `<span>${text}</span> <span class="remove" onclick="this.parentElement.remove()">×</span>`;
+            container.appendChild(pill);
+        }
+    </script>
+</body>
+</html>

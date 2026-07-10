@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approved Projects - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, h4, h5, h6, .logo-text {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* Nav Bar */
+        .navbar {
+            background-color: var(--teal);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .navbar-left { display: flex; align-items: center; gap: 1rem; }
+        .logo-text { font-size: 1.5rem; text-decoration: none; color: white; }
+        .faculty-label { background: rgba(255,255,255,0.2); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; }
+        .navbar-middle { display: flex; gap: 1.5rem; }
+        .nav-link { color: white; text-decoration: none; font-weight: 500; padding-bottom: 0.25rem; transition: all 0.2s; }
+        .nav-link.active, .nav-link:hover { color: var(--orange); border-bottom: 2px solid var(--orange); }
+        .navbar-right { display: flex; align-items: center; gap: 1.5rem; }
+        .bell-icon { position: relative; cursor: pointer; font-size: 1.25rem; }
+        .badge-count { position: absolute; top: -5px; right: -8px; background-color: var(--orange); color: var(--ink); font-size: 0.65rem; font-weight: bold; padding: 2px 5px; border-radius: 10px; }
+        .user-profile { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .avatar { width: 32px; height: 32px; background-color: var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; }
+
+        /* Page Layout */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .page-header { margin-bottom: 2rem; }
+        .page-title { font-size: 2.5rem; color: var(--ink); margin-bottom: 0.5rem; }
+        .breadcrumb { font-size: 0.9rem; color: var(--teal); font-weight: 500; }
+
+        /* Top Action Row */
+        .action-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 35px;
+            border: 1px solid var(--aqua);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: 2px solid var(--cyan);
+            border-color: var(--cyan);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            color: var(--teal);
+        }
+
+        .filter-tabs {
+            display: flex;
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            color: var(--teal);
+            cursor: pointer;
+            border-right: 1px solid var(--rust);
+        }
+        .filter-tab:last-child { border-right: none; }
+        
+        .filter-tab.active {
+            background: var(--teal);
+            color: white;
+        }
+
+        /* Main Content Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            overflow: hidden;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        th { font-weight: 700; color: white; background-color: var(--teal); font-family: 'DM Serif Display', serif; letter-spacing: 0.5px; }
+        tr:nth-child(even) { background-color: rgba(233, 216, 166, 0.2); }
+        tr:hover { border-left: 3px solid var(--orange); }
+
+        .type-badge {
+            background: var(--ink);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .type-idp { background-color: var(--sienna); }
+        .type-udp { background-color: var(--cyan); }
+
+        .keyword-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .kw-chip {
+            background-color: var(--aqua);
+            color: var(--ink);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.6;
+            transition: all 0.2s;
+        }
+
+        .edit-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Stats Sidebar */
+        .stats-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+        }
+
+        .stat-card h3 { font-family: 'DM Serif Display', serif; color: var(--teal); margin-bottom: 1rem; border-bottom: 2px solid rgba(233, 216, 166, 0.5); padding-bottom: 0.5rem; }
+        
+        .stat-value-large {
+            font-size: 2.5rem;
+            font-family: 'DM Serif Display', serif;
+            color: var(--ink);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .top-keywords { margin-top: 1rem; }
+        .top-kw-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .top-kw-item span:first-child { font-weight: bold; color: var(--teal); }
+        .top-kw-item span:last-child { background: var(--custard); padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+
+        .tip-box {
+            background: rgba(10, 147, 150, 0.1);
+            border-left: 4px solid var(--cyan);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        .tip-box strong { color: var(--teal); display: block; margin-bottom: 0.25rem; }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 18, 25, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .modal-title { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 1.5rem; color: var(--ink); }
+
+        .modal-tags {
+            display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem;
+            padding: 1rem; background: rgba(233, 216, 166, 0.2); border-radius: 6px;
+        }
+
+        .modal-tag-pill {
+            background: var(--teal); color: white; padding: 4px 10px; border-radius: 16px; font-size: 0.85rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .modal-tag-pill .remove { cursor: pointer; font-weight: bold; color: rgba(255,255,255,0.7); }
+        .modal-tag-pill .remove:hover { color: white; }
+
+        .add-kw-row { display: flex; gap: 0.5rem; margin-bottom: 2rem; }
+        .add-kw-input { flex: 1; padding: 10px; border: 1px solid var(--aqua); border-radius: 6px; font-family: inherit; }
+        .btn-add { background: var(--cyan); color: white; border: none; padding: 0 16px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+        .modal-actions { display: flex; justify-content: flex-end; gap: 1rem; }
+        .btn { padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 0.95rem; }
+        .btn-outline { background: transparent; border: 2px solid var(--cyan); color: var(--cyan); }
+        .btn-orange { background: var(--orange); color: var(--ink); }
+
+        /* Footer */
+        footer { background-color: var(--ink); color: white; text-align: center; padding: 1.5rem; font-size: 0.9rem; margin-top: auto; }
+
+        @media (max-width: 1024px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .table-container { overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="#" class="logo-text">Project Board</a>
+            <span class="faculty-label">Faculty Portal</span>
+        </div>
+        <div class="navbar-middle">
+            <a href="faculty-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="group-requests.html" class="nav-link">Group Requests</a>
+            <a href="project-requests.html" class="nav-link">Project Reviews</a>
+            <a href="approved-projects.html" class="nav-link active">Approved Projects</a>
+            <a href="generate-report.html" class="nav-link">Generate Report</a>
+        </div>
+        <div class="navbar-right">
+            <div class="bell-icon">🔔<span class="badge-count">3</span></div>
+            <div class="user-profile">
+                <div class="avatar">AS</div>
+                <span style="font-weight: 500;">Prof. Akash</span>
+                <span>▾</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <div class="breadcrumb">12 projects approved · Used for duplicate detection</div>
+            <h1 class="page-title">Approved Projects — PHP</h1>
+        </div>
+
+        <div class="action-row">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search by title, group, or keyword...">
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active">All</button>
+                <button class="filter-tab">IDP</button>
+                <button class="filter-tab">UDP</button>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;">#</th>
+                            <th style="width: 25%;">Title</th>
+                            <th style="width: 15%;">Group</th>
+                            <th style="width: 8%;">Type</th>
+                            <th style="width: 12%;">Approved</th>
+                            <th>Keywords</th>
+                            <th style="width: 60px; text-align: center;">Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Library Management System</strong></td>
+                            <td>Team Alpha</td>
+                            <td><span class="type-badge type-idp">IDP</span></td>
+                            <td>10 Jun 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">library</span>
+                                    <span class="kw-chip">book</span>
+                                    <span class="kw-chip">catalog</span>
+                                    <span class="kw-chip">member</span>
+                                    <span class="kw-chip">issue</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Library Management System')">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Payroll Management System</strong></td>
+                            <td>Team Beta</td>
+                            <td><span class="type-badge type-udp">UDP</span></td>
+                            <td>8 Jun 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">payroll</span>
+                                    <span class="kw-chip">salary</span>
+                                    <span class="kw-chip">employee</span>
+                                    <span class="kw-chip">hr</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Payroll Management System')">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Online Exam System</strong></td>
+                            <td>Team Gamma</td>
+                            <td><span class="type-badge type-idp">IDP</span></td>
+                            <td>5 Jun 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">exam</span>
+                                    <span class="kw-chip">quiz</span>
+                                    <span class="kw-chip">student</span>
+                                    <span class="kw-chip">result</span>
+                                    <span class="kw-chip">marks</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Online Exam System')">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Hotel Booking System</strong></td>
+                            <td>Team Delta</td>
+                            <td><span class="type-badge type-udp">UDP</span></td>
+                            <td>1 Jun 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">hotel</span>
+                                    <span class="kw-chip">booking</span>
+                                    <span class="kw-chip">room</span>
+                                    <span class="kw-chip">guest</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Hotel Booking System')">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Inventory Management</strong></td>
+                            <td>Team Epsilon</td>
+                            <td><span class="type-badge type-idp">IDP</span></td>
+                            <td>28 May 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">inventory</span>
+                                    <span class="kw-chip">stock</span>
+                                    <span class="kw-chip">product</span>
+                                    <span class="kw-chip">warehouse</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Inventory Management')">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><strong>Student Portal System</strong></td>
+                            <td>Team Zeta</td>
+                            <td><span class="type-badge type-udp">UDP</span></td>
+                            <td>25 May 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">student</span>
+                                    <span class="kw-chip">portal</span>
+                                    <span class="kw-chip">fees</span>
+                                    <span class="kw-chip">attendance</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Student Portal System')">✏️</button></td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><strong>Blood Bank System</strong></td>
+                            <td>Team Eta</td>
+                            <td><span class="type-badge type-idp">IDP</span></td>
+                            <td>20 May 2026</td>
+                            <td>
+                                <div class="keyword-chips">
+                                    <span class="kw-chip">blood</span>
+                                    <span class="kw-chip">donor</span>
+                                    <span class="kw-chip">bank</span>
+                                    <span class="kw-chip">inventory</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center;"><button class="edit-btn" onclick="openEditModal('Blood Bank System')">✏️</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="stats-sidebar">
+                <div class="stat-card">
+                    <h3>Keyword Database</h3>
+                    <div class="stat-value-large">47</div>
+                    <div style="color: var(--teal); font-weight: bold; margin-bottom: 1.5rem;">Total Unique Keywords</div>
+                    
+                    <h4 style="font-family: 'DM Sans', sans-serif; font-size: 0.95rem; margin-bottom: 0.5rem; color: var(--ink);">Most Common:</h4>
+                    <div class="top-keywords">
+                        <div class="top-kw-item"><span>management</span> <span>8</span></div>
+                        <div class="top-kw-item"><span>system</span> <span>7</span></div>
+                        <div class="top-kw-item"><span>student</span> <span>5</span></div>
+                        <div class="top-kw-item"><span>inventory</span> <span>3</span></div>
+                        <div class="top-kw-item"><span>booking</span> <span>3</span></div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Duplicate Detection Tip</strong>
+                    More specific keywords lead to better duplicate detection. Avoid generic tags like "web" or "app". Use domain-specific terms like "billing", "prescription", or "catalog".
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <!-- Edit Modal -->
+    <div class="modal-backdrop" id="editModal">
+        <div class="modal">
+            <h2 class="modal-title" id="modalTitle">Edit Keywords</h2>
+            
+            <div class="modal-tags" id="modalTagsContainer">
+                <!-- Tags populated via JS -->
+            </div>
+
+            <div class="add-kw-row">
+                <input type="text" class="add-kw-input" id="newKeywordInput" placeholder="Add new keyword...">
+                <button class="btn-add" onclick="addNewKeyword()">Add</button>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                <button class="btn btn-orange" onclick="saveKeywords()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dummy data for modal interaction
+        let currentEditingProject = "";
+        const dummyTags = {
+            "Library Management System": ["library", "book", "catalog", "member", "issue"],
+            "Payroll Management System": ["payroll", "salary", "employee", "hr"]
+        };
+
+        function openEditModal(projectName) {
+            currentEditingProject = projectName;
+            document.getElementById('modalTitle').innerText = "Edit Keywords — " + projectName;
+            
+            const container = document.getElementById('modalTagsContainer');
+            container.innerHTML = '';
+            
+            const tags = dummyTags[projectName] || ["system", "management"];
+            
+            tags.forEach(tag => {
+                const pill = document.createElement('div');
+                pill.className = 'modal-tag-pill';
+                pill.innerHTML = `<span>${tag}</span> <span class="remove" onclick="this.parentElement.remove()">×</span>`;
+                container.appendChild(pill);
+            });
+
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            document.getElementById('newKeywordInput').value = '';
+        }
+
+        function addNewKeyword() {
+            const input = document.getElementById('newKeywordInput');
+            const val = input.value.trim().toLowerCase();
+            if(val) {
+                const container = document.getElementById('modalTagsContainer');
+                const pill = document.createElement('div');
+                pill.className = 'modal-tag-pill';
+                pill.innerHTML = `<span>${val}</span> <span class="remove" onclick="this.parentElement.remove()">×</span>`;
+                container.appendChild(pill);
+                input.value = '';
+            }
+        }
+
+        // Trigger Add on Enter key
+        document.getElementById('newKeywordInput').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                addNewKeyword();
+            }
+        });
+
+        function saveKeywords() {
+            alert('Keywords saved successfully for ' + currentEditingProject);
+            closeEditModal();
+        }
+
+        // Tab selection visual logic
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

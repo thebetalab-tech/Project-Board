@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Status - Project Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6, .serif {
+            font-family: 'DM Serif Display', serif;
+            margin-top: 0;
+        }
+
+        .nav {
+            background-color: var(--teal);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--orange);
+            border-bottom-color: var(--orange);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .badge-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background-color: var(--orange);
+            color: var(--ink);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .avatar-small {
+            width: 32px;
+            height: 32px;
+            background-color: var(--cyan);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .footer {
+            background-color: var(--ink);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* Demo Toggle */
+        .demo-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid var(--rust);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .demo-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .demo-btn.active {
+            background: var(--ink);
+            color: white;
+        }
+
+        /* Hero Cards */
+        .hero-card {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--rust);
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* State specific styles */
+        .state-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Pending */
+        #state-pending .hero-icon {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Approved */
+        #state-approved .hero-card {
+            background: var(--teal);
+            color: white;
+            border: none;
+        }
+        #state-approved .hero-title { color: white; }
+        #state-approved .hero-subtitle { color: rgba(255,255,255,0.9); }
+        .trophy-card {
+            background: white;
+            color: var(--ink);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: left;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        /* Rejected */
+        #state-rejected .hero-card {
+            border-top: 6px solid var(--clay);
+        }
+        .reject-quote {
+            border-left: 4px solid var(--clay);
+            background: rgba(174, 32, 18, 0.05);
+            padding: 1.5rem;
+            margin: 2rem auto;
+            text-align: left;
+            font-style: italic;
+            color: var(--ink);
+            border-radius: 0 8px 8px 0;
+            max-width: 600px;
+        }
+
+        /* Details Card */
+        .details-card {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            text-align: left;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--teal);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-item .value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .func-desc {
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .show-more {
+            color: var(--cyan);
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--orange);
+            color: var(--ink);
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 1rem;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--rust);
+            color: white;
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--cyan);
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 12px 24px;
+            border: 2px solid var(--cyan);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--cyan);
+            color: white;
+        }
+
+        /* History */
+        .history-section {
+            margin-top: 3rem;
+        }
+        .history-title {
+            font-size: 1.2rem;
+            color: var(--teal);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--rust);
+            padding-bottom: 0.5rem;
+        }
+        .history-item {
+            background: rgba(255,255,255,0.5);
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 3px solid #ccc;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .details-grid { grid-template-columns: 1fr; }
+            .nav { flex-direction: column; gap: 1rem; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="#" class="nav-logo">Project Board</a>
+        <div class="nav-links">
+            <a href="student-dashboard.html">Dashboard</a>
+            <a href="#">My Group</a>
+            <a href="notifications.html">Notifications</a>
+        </div>
+        <div class="nav-right">
+            <div class="badge-icon" onclick="window.location.href='notifications.html'">
+                🔔<span class="badge-count">3</span>
+            </div>
+            <div class="user-profile">
+                <div class="avatar-small">TJ</div>
+                <span>Tirth Joshi ▾</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        
+        <!-- Demo Toggle -->
+        <div class="demo-toggle">
+            <button class="demo-btn active" onclick="switchState('pending')">Pending</button>
+            <button class="demo-btn" onclick="switchState('approved')">Approved</button>
+            <button class="demo-btn" onclick="switchState('rejected')">Rejected</button>
+        </div>
+
+        <!-- STATE 1: PENDING -->
+        <div id="state-pending" class="state-section" style="display: block;">
+            <div class="hero-card">
+                <div class="hero-icon">⏳</div>
+                <h1 class="hero-title serif">Awaiting Review</h1>
+                <p class="hero-subtitle">Your mentor has received your proposal and will review it soon.<br>Submitted: 18 June 2026. Usually reviewed within 2-3 days.</p>
+            </div>
+
+            <div class="details-card">
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <label>Project Title</label>
+                        <div class="value serif" style="font-size: 1.3rem;">Hospital Management System</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Technology</label>
+                        <div class="value">PHP</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Project Type</label>
+                        <div class="value">UDP</div>
+                    </div>
+                    <div class="detail-item">
+                        <label>Mentor</label>
+                        <div class="value">Prof. Akash Siddhpura</div>
+                    </div>
+                </div>
+                <div class="detail-item">
+                    <label>Functionality</label>
+                    <div class="func-desc">
+                        A comprehensive web-based system to manage hospital operations including patient registration, doctor assignment, appointment booking, billing, and discharge processing...
+                        <br><a href="#" class="show-more">Show more ▾</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATE 2: APPROVED -->
+        <div id="state-approved" class="state-section">
+            <div class="hero-card">
+                <div class="hero-icon">✅</div>
+                <h1 class="hero-title serif">Project Approved!</h1>
+                <p class="hero-subtitle">Congratulations! Your project has been officially registered.</p>
+                
+                <div class="trophy-card">
+                    <div style="font-size: 0.9rem; color: var(--teal); font-weight: bold; margin-bottom: 0.5rem;">APPROVED PROJECT</div>
+                    <h2 class="serif" style="margin-bottom: 1rem; font-size: 1.8rem;">Hospital Management System</h2>
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+                        <strong>Mentor:</strong> Prof. Akash Siddhpura &nbsp;|&nbsp; <strong>Date:</strong> 20 June 2026
+                    </div>
+                    <div style="background: rgba(148, 210, 189, 0.2); padding: 1rem; border-radius: 6px; border-left: 4px solid var(--aqua);">
+                        <strong>Mentor Remark:</strong> "Great project idea. Ensure you cover both admin and patient modules."
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <button class="btn-primary" style="background-color: white; color: var(--teal);" onclick="alert('Downloading PDF...')">Download Approval Letter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATE 3: REJECTED -->
+        <div id="state-rejected" class="state-section">
+            <div class="hero-card">
+                <div class="hero-icon">❌</div>
+                <h1 class="hero-title serif" style="color: var(--clay);">Proposal Rejected</h1>
+                <p class="hero-subtitle">Your project idea was not approved by your mentor.</p>
+                
+                <div class="reject-quote">
+                    "This project is very similar to Team Alpha's approved project. Please choose a more unique idea and focus on a specific niche."
+                    <div style="margin-top: 0.5rem; font-size: 0.85rem; font-style: normal; font-weight: bold;">— Prof. Akash Siddhpura</div>
+                </div>
+
+                <a href="submit-project.html" class="btn-primary">Submit New Proposal →</a>
+            </div>
+
+            <div class="history-section">
+                <h3 class="history-title serif">Previous Submissions</h3>
+                
+                <div class="history-item">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <strong>Hospital Management System</strong>
+                        <span style="color: var(--clay); font-weight: bold;">Rejected (20 Jun)</span>
+                    </div>
+                    <div style="font-size: 0.9rem; color: #666;">Technology: PHP | Type: UDP</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        Project Board · Tirth Joshi · Rudra Rangpariya · Sujal Domadiya · 5th Sem Diploma CE
+    </footer>
+
+    <script>
+        function switchState(state) {
+            // Update buttons
+            document.querySelectorAll('.demo-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Hide all sections
+            document.querySelectorAll('.state-section').forEach(sec => {
+                sec.style.display = 'none';
+            });
+
+            // Show target
+            document.getElementById(`state-${state}`).style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            background-image: radial-gradient(var(--rust) 0.5px, transparent 0.5px), radial-gradient(var(--rust) 0.5px, var(--custard) 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            background-attachment: fixed;
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1, h2, h3, h4, h5, h6, .serif {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* 60/40 Split Card */
+        .register-wrapper {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 18, 25, 0.15);
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            border: 1px solid var(--rust);
+        }
+
+        /* Left Column */
+        .left-col {
+            flex: 0 0 40%;
+            background: linear-gradient(135deg, var(--teal), #003d4a);
+            color: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-col h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stepper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .step.active {
+            opacity: 1;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            border: 2px solid transparent;
+        }
+
+        .step.active .step-icon {
+            background: var(--orange);
+            color: var(--ink);
+            border-color: var(--orange);
+            box-shadow: 0 0 15px rgba(238, 155, 0, 0.4);
+        }
+
+        .step-content {
+            padding-top: 5px;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .step-desc {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* Connecting line for steps */
+        .stepper::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            bottom: 30px;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: -1;
+        }
+
+        .left-footer {
+            margin-top: auto;
+            position: relative;
+            z-index: 2;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+
+        /* Right Column */
+        .right-col {
+            flex: 0 0 60%;
+            padding: 40px 50px;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-col h2 {
+            color: var(--ink);
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--ink);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--aqua);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 2px rgba(10, 147, 150, 0.2);
+        }
+
+        .form-group.has-error input, .form-group.has-error select {
+            border-color: var(--clay);
+        }
+
+        .error-msg {
+            display: none;
+            color: var(--clay);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .form-group.has-error .error-msg {
+            display: block;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .eye-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--teal);
+            font-size: 1rem;
+        }
+
+        /* Password Strength Meter */
+        .pwd-meter-container {
+            margin-top: 8px;
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .pwd-meter-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .pwd-meter-text {
+            font-size: 0.8rem;
+            margin-top: 4px;
+            text-align: right;
+            color: #666;
+            min-height: 16px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: var(--orange);
+            color: var(--ink);
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'DM Sans', sans-serif;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--rust);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .login-link {
+            text-align: center;
+            display: block;
+            margin-top: 20px;
+            color: var(--ink);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .login-link span {
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .login-link:hover span {
+            text-decoration: underline;
+            color: var(--cyan);
+        }
+
+        /* Success Banner */
+        .success-banner {
+            display: none;
+            background: var(--aqua);
+            color: var(--ink);
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 850px) {
+            .register-wrapper {
+                flex-direction: column;
+            }
+            .left-col, .right-col {
+                flex: none;
+                width: 100%;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-wrapper">
+        <!-- Left Column -->
+        <div class="left-col">
+            <h1>Join Project Board</h1>
+            
+            <div class="stepper">
+                <div class="step active">
+                    <div class="step-icon">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Create Account</div>
+                        <div class="step-desc">Enter your personal and academic details to get started.</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Form Your Group</div>
+                        <div class="step-desc">Invite classmates and build your project team.</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-icon">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Submit Your Idea</div>
+                        <div class="step-desc">Propose a project and get faculty approval.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="left-footer">
+                Project Board &middot; 5th Sem Diploma CE
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-col">
+            <h2>Create Your Account</h2>
+            
+            <div class="success-banner" id="successBanner">
+                Account created! Redirecting to login...
+            </div>
+
+            <form id="registerForm" novalidate>
+                <div class="form-row">
+                    <div class="form-group" id="group-fullname">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" placeholder="John Doe">
+                        <div class="error-msg">Full name is required</div>
+                    </div>
+                    <div class="form-group" id="group-enrollment">
+                        <label for="enrollment">Enrollment No.</label>
+                        <input type="text" id="enrollment" placeholder="24020201000" maxlength="11">
+                        <div class="error-msg">Must be exactly 11 digits</div>
+                    </div>
+                </div>
+
+                <div class="form-group" id="group-email">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="you@college.edu">
+                    <div class="error-msg">Please enter a valid email address</div>
+                </div>
+
+                <div class="form-group" id="group-dept">
+                    <label for="department">Department</label>
+                    <select id="department">
+                        <option value="">Select Department</option>
+                        <option value="CE">Computer Engineering</option>
+                        <option value="IT">Information Technology</option>
+                        <option value="ME">Mechanical</option>
+                        <option value="CV">Civil</option>
+                        <option value="EE">Electrical</option>
+                    </select>
+                    <div class="error-msg">Please select your department</div>
+                </div>
+
+                <div class="form-group" id="group-password">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" placeholder="Min 8 characters">
+                        <button type="button" class="eye-toggle" onclick="toggleVisibility('password', this)">👁️</button>
+                    </div>
+                    <div class="pwd-meter-container">
+                        <div class="pwd-meter-fill" id="pwdMeterFill"></div>
+                    </div>
+                    <div class="pwd-meter-text" id="pwdMeterText"></div>
+                    <div class="error-msg">Password must be at least 8 characters</div>
+                </div>
+
+                <div class="form-group" id="group-confirm">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Repeat password">
+                        <button type="button" class="eye-toggle" onclick="toggleVisibility('confirmPassword', this)">👁️</button>
+                    </div>
+                    <div class="error-msg">Passwords do not match</div>
+                </div>
+
+                <button type="submit" class="btn-primary" id="submitBtn">
+                    Register Account
+                </button>
+            </form>
+
+            <a href="login.html" class="login-link">
+                Already have an account? <span>Login</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Toggle visibility for both password fields
+        function toggleVisibility(inputId, btnElement) {
+            const input = document.getElementById(inputId);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            btnElement.textContent = type === 'password' ? '👁️' : '🙈';
+        }
+
+        // Password Strength Meter
+        const passwordInput = document.getElementById('password');
+        const meterFill = document.getElementById('pwdMeterFill');
+        const meterText = document.getElementById('pwdMeterText');
+
+        passwordInput.addEventListener('input', function() {
+            const val = this.value;
+            let strength = 0;
+            
+            if (val.length > 0) strength += 1;
+            if (val.length >= 8) strength += 1;
+            if (/[A-Z]/.test(val) && /[0-9]/.test(val)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(val)) strength += 1;
+
+            switch(strength) {
+                case 0:
+                    meterFill.style.width = '0%';
+                    meterText.textContent = '';
+                    break;
+                case 1:
+                    meterFill.style.width = '25%';
+                    meterFill.style.backgroundColor = 'var(--clay)'; // Red
+                    meterText.textContent = 'Weak';
+                    meterText.style.color = 'var(--clay)';
+                    break;
+                case 2:
+                    meterFill.style.width = '50%';
+                    meterFill.style.backgroundColor = 'var(--orange)'; // Orange
+                    meterText.textContent = 'Fair';
+                    meterText.style.color = 'var(--orange)';
+                    break;
+                case 3:
+                    meterFill.style.width = '75%';
+                    meterFill.style.backgroundColor = 'var(--cyan)'; // Cyan
+                    meterText.textContent = 'Strong';
+                    meterText.style.color = 'var(--cyan)';
+                    break;
+                case 4:
+                    meterFill.style.width = '100%';
+                    meterFill.style.backgroundColor = 'var(--aqua)'; // Green/Aqua
+                    meterText.textContent = 'Very Strong';
+                    meterText.style.color = '#2d6a4f';
+                    break;
+            }
+        });
+
+        // Form Validation & Submission
+        const form = document.getElementById('registerForm');
+        
+        function setError(id, show) {
+            const group = document.getElementById(`group-${id}`);
+            if(show) {
+                group.classList.add('has-error');
+            } else {
+                group.classList.remove('has-error');
+            }
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+
+            const fullname = document.getElementById('fullname').value.trim();
+            const enrollment = document.getElementById('enrollment').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const dept = document.getElementById('department').value;
+            const pwd = passwordInput.value;
+            const confirmPwd = document.getElementById('confirmPassword').value;
+
+            // Fullname validation
+            if (fullname === '') { setError('fullname', true); isValid = false; }
+            else { setError('fullname', false); }
+
+            // Enrollment validation (exactly 11 digits)
+            if (!/^\d{11}$/.test(enrollment)) { setError('enrollment', true); isValid = false; }
+            else { setError('enrollment', false); }
+
+            // Email validation
+            if (email === '' || !email.includes('@')) { setError('email', true); isValid = false; }
+            else { setError('email', false); }
+
+            // Department validation
+            if (dept === '') { setError('dept', true); isValid = false; }
+            else { setError('dept', false); }
+
+            // Password validation
+            if (pwd.length < 8) { setError('password', true); isValid = false; }
+            else { setError('password', false); }
+
+            // Confirm Password validation
+            if (confirmPwd !== pwd || pwd === '') { setError('confirm', true); isValid = false; }
+            else { setError('confirm', false); }
+
+            if (isValid) {
+                // Show success banner and redirect
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = true;
+                btn.style.opacity = '0.7';
+                
+                const banner = document.getElementById('successBanner');
+                banner.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>

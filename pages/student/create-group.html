@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Group - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6, .serif {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* Nav Bar */
+        .navbar {
+            background-color: var(--teal);
+            color: white;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-middle {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bell-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--orange);
+            color: var(--ink);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .avatar-small {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Page Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Page Header */
+        .page-header {
+            width: 100%;
+            max-width: 560px;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .breadcrumb a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .page-title {
+            font-size: 2.2rem;
+        }
+
+        /* Card Setup */
+        .card {
+            width: 100%;
+            max-width: 560px;
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .card-header {
+            background-color: var(--teal);
+            color: white;
+            padding: 15px 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 30px 24px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .char-counter {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--aqua);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 2px rgba(10, 147, 150, 0.2);
+        }
+
+        .form-group.has-error .form-control {
+            border-color: var(--clay);
+            background-color: rgba(174, 32, 18, 0.05);
+        }
+
+        .error-msg {
+            color: var(--clay);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-group.has-error .error-msg {
+            display: block;
+        }
+
+        .rules-list {
+            margin-top: 10px;
+            list-style: none;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .rules-list li {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rules-list li::before {
+            content: "•";
+            color: var(--cyan);
+            font-weight: bold;
+        }
+
+        /* Preview Box */
+        .preview-box {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 6px;
+            padding: 20px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        .preview-box.active {
+            opacity: 1;
+            border-color: var(--cyan);
+            background: rgba(10, 147, 150, 0.05);
+        }
+
+        .preview-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--ink);
+            min-height: 30px;
+        }
+
+        .slots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .slot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .slot-leader {
+            background: var(--teal);
+            color: white;
+            position: relative;
+        }
+        .slot-leader::after {
+            content: '★';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            color: var(--orange);
+            font-size: 0.9rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .slot-empty {
+            background: white;
+            border: 2px dashed #cbd5e1;
+            color: #cbd5e1;
+        }
+
+        /* Buttons & Notes */
+        .btn-primary {
+            width: 100%;
+            background: var(--orange);
+            color: var(--ink);
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-primary:hover {
+            background: var(--rust);
+            color: white;
+        }
+
+        .info-note {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #64748b;
+            text-align: center;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 6px;
+            line-height: 1.4;
+        }
+
+        /* Next Steps Section */
+        .next-steps-section {
+            width: 100%;
+            max-width: 700px;
+            margin-top: 20px;
+        }
+
+        .next-steps-title {
+            text-align: center;
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .mini-flow {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .flow-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-card {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 6px;
+            padding: 15px 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+            z-index: 2;
+        }
+
+        .flow-card.active {
+            background: var(--teal);
+            color: white;
+        }
+
+        .flow-desc {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.3;
+        }
+
+        .flow-arrow {
+            position: absolute;
+            top: 20px;
+            right: -20px;
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            z-index: 1;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ink);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            .mini-flow {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .flow-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav Bar -->
+    <nav class="navbar">
+        <a href="#" class="nav-left">Project Board</a>
+        <div class="nav-middle">
+            <a href="student-dashboard.html" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link active">My Group</a>
+            <a href="notifications.html" class="nav-link">Notifications</a>
+        </div>
+        <div class="nav-right">
+            <div class="bell-icon">
+                🔔
+                <span class="badge-count">3</span>
+            </div>
+            <div class="user-dropdown">
+                <div class="avatar-small">TJ</div>
+                Tirth Joshi ▾
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <div class="page-header">
+            <div class="breadcrumb"><a href="student-dashboard.html">Dashboard</a> > Create Group</div>
+            <h1 class="page-title">Start Your Team</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-header">New Group</div>
+            <div class="card-body">
+                <form id="createGroupForm" novalidate>
+                    <div class="form-group" id="groupNameContainer">
+                        <label for="groupName">
+                            Group Name
+                            <span class="char-counter" id="charCounter">0 / 50</span>
+                        </label>
+                        <input type="text" id="groupName" class="form-control" placeholder="e.g. Team Syntax Error" maxlength="50" autocomplete="off">
+                        <div class="error-msg" id="errorMsg">Group name must be between 3 and 50 characters.</div>
+                        
+                        <ul class="rules-list">
+                            <li>3-50 characters</li>
+                            <li>Only letters, numbers, spaces</li>
+                            <li>This will be visible to your mentor</li>
+                        </ul>
+                    </div>
+
+                    <div class="preview-box" id="previewBox">
+                        <div class="preview-title" id="previewTitle">Your Group Name...</div>
+                        <div class="slots">
+                            <div class="slot slot-leader" title="You (Leader)">TJ</div>
+                            <div class="slot slot-empty"></div>
+                            <div class="slot slot-empty"></div>
+                            <div class="slot slot-empty"></div>
+                            <div class="slot slot-empty"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Create Group & Become Leader</button>
+                    
+                    <div class="info-note">
+                        ℹ️ You will automatically become the Group Leader. You can invite up to 4 more members after creating the group.
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="next-steps-section">
+            <h3 class="next-steps-title">What happens next?</h3>
+            <div class="mini-flow">
+                <div class="flow-step">
+                    <div class="flow-card active">Create Group</div>
+                    <div class="flow-desc">Set up the team and become the leader.</div>
+                    <div class="flow-arrow">→</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-card">Invite Members</div>
+                    <div class="flow-desc">Add up to 4 classmates to join your group.</div>
+                    <div class="flow-arrow">→</div>
+                </div>
+                <div class="flow-step">
+                    <div class="flow-card">Select Technology</div>
+                    <div class="flow-desc">Pick a tech stack and choose your mentor.</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        Project Board &middot; Tirth Joshi &middot; Rudra Rangpariya &middot; Sujal Domadiya &middot; 5th Sem Diploma CE
+    </footer>
+
+    <script>
+        const groupInput = document.getElementById('groupName');
+        const charCounter = document.getElementById('charCounter');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewBox = document.getElementById('previewBox');
+        const form = document.getElementById('createGroupForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const container = document.getElementById('groupNameContainer');
+
+        // Live input handling
+        groupInput.addEventListener('input', function(e) {
+            let val = this.value;
+            
+            // Allow only letters, numbers, spaces
+            val = val.replace(/[^A-Za-z0-9 ]/g, '');
+            this.value = val;
+
+            const len = val.length;
+            charCounter.textContent = `${len} / 50`;
+
+            if (len > 0) {
+                previewTitle.textContent = val;
+                previewBox.classList.add('active');
+            } else {
+                previewTitle.textContent = 'Your Group Name...';
+                previewBox.classList.remove('active');
+            }
+            
+            // Remove error state on typing
+            if(len >= 3) {
+                container.classList.remove('has-error');
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const val = groupInput.value.trim();
+            
+            if (val.length < 3 || val.length > 50) {
+                container.classList.add('has-error');
+                return;
+            }
+
+            // Simulate success
+            const btn = this.querySelector('.btn-primary');
+            btn.textContent = "Creating...";
+            btn.style.opacity = '0.8';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = 'invite-members.html';
+            }, 800);
+        });
+    </script>
+</body>
+</html>

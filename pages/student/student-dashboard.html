@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Project Board</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #001219;
+            --teal: #005f73;
+            --cyan: #0a9396;
+            --aqua: #94d2bd;
+            --custard: #e9d8a6;
+            --orange: #ee9b00;
+            --rust: #ca6702;
+            --sienna: #bb3e03;
+            --clay: #ae2012;
+            --brick: #9b2226;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--custard);
+            color: var(--ink);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1, h2, h3, h4, h5, h6, .serif {
+            font-family: 'DM Serif Display', serif;
+        }
+
+        /* Nav Bar */
+        .navbar {
+            background-color: var(--teal);
+            color: white;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-middle {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-link.active {
+            color: var(--orange);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--orange);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bell-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .badge-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: var(--orange);
+            color: var(--ink);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .avatar-small {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Page Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .page-subtitle {
+            color: #4a5568;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Stepper */
+        .stepper-container {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            padding: 25px 30px;
+            margin-bottom: 30px;
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .stepper::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 5%;
+            right: 5%;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .step {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 2px solid white;
+            transition: all 0.3s;
+        }
+
+        .step-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #64748b;
+            max-width: 100px;
+        }
+
+        /* Completed Step */
+        .step.completed .step-circle {
+            background: var(--aqua);
+            color: var(--ink);
+        }
+        .step.completed .step-label {
+            color: var(--ink);
+        }
+
+        /* Current Step */
+        .step.current .step-circle {
+            background: var(--orange);
+            color: var(--ink);
+            box-shadow: 0 0 0 4px rgba(238, 155, 0, 0.2);
+        }
+        .step.current .step-label {
+            color: var(--ink);
+            font-weight: 700;
+        }
+
+        /* Main Content 2-Col Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,18,25,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .card-body {
+            padding: 24px;
+            flex: 1;
+        }
+
+        .card-footer {
+            padding: 20px 24px;
+            background: #fafafa;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Status Badges */
+        .badge {
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-active { background: var(--cyan); color: white; }
+        .badge-pending { background: var(--orange); color: var(--ink); }
+        .badge-approved { background: var(--aqua); color: var(--ink); }
+        .badge-rejected { background: var(--clay); color: white; }
+        .badge-tech { background: #f1f5f9; color: var(--ink); border: 1px solid #cbd5e1; }
+
+        /* Group Info details */
+        .info-row {
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        .info-label {
+            font-weight: 700;
+            color: #64748b;
+            margin-right: 10px;
+        }
+
+        /* Member List */
+        .member-list {
+            margin-top: 20px;
+        }
+        .member-list-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--teal);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .member-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .member-item:last-child {
+            border-bottom: none;
+        }
+        .member-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .member-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--custard);
+            color: var(--teal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .member-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .leader-star { color: var(--orange); font-size: 0.9rem; }
+        .member-enroll {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: var(--orange);
+            color: var(--ink);
+            font-weight: 700;
+            border-radius: 6px;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn-primary:hover {
+            background: var(--rust);
+            color: white;
+        }
+        .btn-full { width: 100%; }
+
+        /* Right Column Cards */
+        .side-card {
+            margin-bottom: 24px;
+        }
+        .side-card-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding: 0 5px;
+            border-bottom: 2px solid var(--teal);
+            display: inline-block;
+        }
+        
+        .notification-list {
+            list-style: none;
+        }
+        .notif-item {
+            padding: 12px 15px;
+            background: #fafafa;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--cyan);
+        }
+        .notif-item.unread {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-left-color: var(--orange);
+        }
+        .notif-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .notif-time {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+        .quick-links li {
+            margin-bottom: 8px;
+        }
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .quick-link:hover {
+            border-color: var(--cyan);
+            background: #f8fafc;
+        }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .stat-card {
+            background: white;
+            border: 1px solid var(--rust);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,18,25,0.05);
+        }
+        .stat-value {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--teal);
+            line-height: 1.2;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--ink);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stepper::before {
+                display: none;
+            }
+            .stepper {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            .step {
+                flex-direction: row;
+                text-align: left;
+            }
+        }
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-middle {
+                display: none; /* In real app, hamburger menu here */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Nav Bar -->
+    <nav class="navbar">
+        <a href="#" class="nav-left">Project Board</a>
+        <div class="nav-middle">
+            <a href="student-dashboard.html" class="nav-link active">Dashboard</a>
+            <a href="invite-members.html" class="nav-link">My Group</a>
+            <a href="notifications.html" class="nav-link">Notifications</a>
+        </div>
+        <div class="nav-right">
+            <div class="bell-icon">
+                🔔
+                <span class="badge-count">3</span>
+            </div>
+            <div class="user-dropdown">
+                <div class="avatar-small">TJ</div>
+                Tirth Joshi ▾
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <h1 class="page-title">Good morning, Tirth 👋</h1>
+            <p class="page-subtitle">Here's where your group stands today.</p>
+        </header>
+
+        <!-- Progress Stepper -->
+        <div class="stepper-container">
+            <div class="stepper">
+                <div class="step completed">
+                    <div class="step-circle">✓</div>
+                    <div class="step-label">Step 1:<br>Register</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">✓</div>
+                    <div class="step-label">Step 2:<br>Form Group</div>
+                </div>
+                <div class="step completed">
+                    <div class="step-circle">✓</div>
+                    <div class="step-label">Step 3:<br>Select Technology</div>
+                </div>
+                <div class="step current">
+                    <div class="step-circle">4</div>
+                    <div class="step-label">Step 4:<br>Choose Mentor</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">5</div>
+                    <div class="step-label">Step 5:<br>Submit Project</div>
+                </div>
+                <div class="step">
+                    <div class="step-circle">6</div>
+                    <div class="step-label">Step 6:<br>Approved!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <div class="card-title">Team Syntax Error</div>
+                        <span class="badge badge-active">Active</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="info-row">
+                        <span class="info-label">Technology:</span>
+                        <span class="badge badge-tech">PHP</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Mentor:</span>
+                        Prof. Akash Siddhpura <span class="badge badge-pending" style="margin-left: 8px;">Pending</span>
+                    </div>
+
+                    <div class="member-list">
+                        <div class="member-list-title">Members</div>
+                        
+                        <div class="member-item">
+                            <div class="member-info">
+                                <div class="avatar-small member-avatar">TJ</div>
+                                <div>
+                                    <div class="member-name">Tirth Joshi <span class="leader-star">★</span></div>
+                                    <div class="member-enroll">24020201071</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-tech">Leader</span>
+                        </div>
+
+                        <div class="member-item">
+                            <div class="member-info">
+                                <div class="avatar-small member-avatar" style="background:#e0f2fe; color:#0369a1;">RR</div>
+                                <div>
+                                    <div class="member-name">Rudra Rangpariya</div>
+                                    <div class="member-enroll">24020201148</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-approved">Accepted</span>
+                        </div>
+
+                        <div class="member-item">
+                            <div class="member-info">
+                                <div class="avatar-small member-avatar" style="background:#fce7f3; color:#be185d;">SD</div>
+                                <div>
+                                    <div class="member-name">Sujal Domadiya</div>
+                                    <div class="member-enroll">24020201046</div>
+                                </div>
+                            </div>
+                            <span class="badge badge-approved">Accepted</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="select-mentor.html" class="btn-primary btn-full">Choose Your Mentor →</a>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Notifications -->
+                <div class="side-card">
+                    <h3 class="side-card-title">Notifications</h3>
+                    <ul class="notification-list">
+                        <li class="notif-item unread">
+                            <div class="notif-text">Rudra accepted your group invitation</div>
+                            <div class="notif-time">2 min ago</div>
+                        </li>
+                        <li class="notif-item unread">
+                            <div class="notif-text">Sujal Domadiya accepted your invitation</div>
+                            <div class="notif-time">1 hour ago</div>
+                        </li>
+                        <li class="notif-item">
+                            <div class="notif-text">Group created successfully</div>
+                            <div class="notif-time">Yesterday</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="side-card">
+                    <h3 class="side-card-title">Quick Links</h3>
+                    <ul class="quick-links">
+                        <li><a href="invite-members.html" class="quick-link">👥 My Group</a></li>
+                        <li><a href="submit-project.html" class="quick-link">💡 Submit Project</a></li>
+                        <li><a href="#" class="quick-link">🔍 Check Idea Availability</a></li>
+                        <li><a href="notifications.html" class="quick-link">🔔 Notifications</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Members</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">PHP</div>
+                <div class="stat-label">Technology</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="font-size:1.5rem; display:flex; align-items:center; height:100%;">Pending</div>
+                <div class="stat-label" style="margin-top:auto;">Mentor Status</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Projects Submitted</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        Project Board &middot; Tirth Joshi &middot; Rudra Rangpariya &middot; Sujal Domadiya &middot; 5th Sem Diploma CE
+    </footer>
+
+    <script>
+        // Any simple interactive elements can go here
+        document.querySelector('.bell-icon').addEventListener('click', () => {
+            window.location.href = 'notifications.html';
+        });
+    </script>
+</body>
+</html>
